@@ -12,6 +12,19 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .vue()
     .postCss('resources/css/app.css', 'public/css', [
         //
-    ]);
+    ]).webpackConfig({
+        output: {
+            chunkFilename: 'js/[name].js?id=[chunkhash]',
+        }
+    }).browserSync({
+        // fixes pagination urls otherwise they get re-written to use the service `container_name`...
+        host: 'localhost:8000',
+        // service container_name...
+        proxy: 'nginx',
+        // matches the port number exposed earlier...
+        port: 3000,
+        open: false,
+    });
