@@ -34,5 +34,15 @@ Route::group(["middleware" => "auth:web"], function () {
     Route::group(["prefix" => "dashboard"], function () {
         Route::get("/students", [\App\Http\Controllers\StudentController::class, 'index'])->name('dashboard.students');
 
+        Route::get("/students/{id}", [\App\Http\Controllers\StudentController::class, 'show'])->name('students.show');
+
+        Route::post("/students", [\App\Http\Controllers\StudentController::class, 'store'])->name('students.store');
+
+        Route::put("/students/{id}", [\App\Http\Controllers\StudentController::class, 'update'])->name('students.update');
+
+
+        Route::delete("/students/{id}", [\App\Http\Controllers\StudentController::class, 'destroy'])->name('students.destroy');
+
+
     });
 });

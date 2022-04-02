@@ -39266,14 +39266,6 @@ var map = {
 	"./Students/Index.vue": [
 		"./resources/js/Pages/Students/Index.vue",
 		"resources_js_Pages_Students_Index_vue"
-	],
-	"./Students/Teste": [
-		"./resources/js/Pages/Students/Teste.vue",
-		"resources_js_Pages_Students_Teste_vue"
-	],
-	"./Students/Teste.vue": [
-		"./resources/js/Pages/Students/Teste.vue",
-		"resources_js_Pages_Students_Teste_vue"
 	]
 };
 function webpackAsyncContext(req) {
@@ -39424,7 +39416,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Auth_Login_vue":"fc814156db5c03e4","resources_js_Pages_Auth_Register_vue":"72a967e7d49ff1e6","resources_js_Pages_Students_Index_vue":"1d643237f85d93da","resources_js_Pages_Students_Teste_vue":"24e765b0e64449d9"}[chunkId] + "";
+/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Auth_Login_vue":"fc814156db5c03e4","resources_js_Pages_Auth_Register_vue":"72a967e7d49ff1e6","resources_js_Pages_Students_Index_vue":"1d643237f85d93da"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	
