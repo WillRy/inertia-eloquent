@@ -2,8 +2,9 @@
     <div class="form-group" :style="{'margin-bottom': mb, width: width}">
         <label v-if="label" :for="$attrs.id">{{ label }}</label>
         <input type="text" :value="modelValue" @input="updateValue" v-bind="attrs">
-        <div class="errorMessage" v-if="error">
+        <div class="errorMessage" v-if="error || $slots.error">
             <div>{{error}}</div>
+            <slot name="error"></slot>
         </div>
     </div>
 </template>
@@ -65,6 +66,7 @@ input {
     border-radius: 4px;
     width: 100%;
     padding: 13px;
+    min-height: 50px;
 }
 
 /deep/ .errorMessage > div{
