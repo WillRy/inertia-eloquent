@@ -11,6 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
+const Clean = require("./limpar_builds")
+
+if(mix.inProduction()) {
+    mix.extend('clean', new Clean);
+    mix.clean();
+}
+
 mix.js('resources/js/app.js', 'public/js')
     .vue()
     .postCss('resources/css/app.css', 'public/css', [
