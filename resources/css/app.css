@@ -1,0 +1,80 @@
+@import "normalize.css";
+@import "~vue-toast-notification/dist/theme-sugar.css";
+
+html, body {
+    height: 100%;
+}
+
+:root {
+    --cor-principal: #6d74ed;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+p, ul, li, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+
+.error {
+    border: 1px solid red !important;
+}
+
+
+.link-btn {
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    margin: 10px 0;
+}
+
+.link-btn:hover {
+    opacity: 0.6;
+}
+
+.link-btn-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link-btn-primary {
+    color: var(--cor-principal);
+}
+
+
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 13px;
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-primary {
+    color: #fff;
+    font-weight: bold;
+    background: var(--cor-principal);
+}
+
+
+.btn-primary:hover {
+    opacity: 0.6;
+}
