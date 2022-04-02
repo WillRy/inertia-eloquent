@@ -32,17 +32,32 @@ Route::group(["middleware" => "auth:web"], function () {
     Route::get("/logout", [\App\Http\Controllers\Auth\AuthController::class, 'logout'])->name("logout");
 
     Route::group(["prefix" => "dashboard"], function () {
-        Route::get("/students", [\App\Http\Controllers\StudentController::class, 'index'])->name('dashboard.students');
 
-        Route::get("/students/{id}", [\App\Http\Controllers\StudentController::class, 'show'])->name('students.show');
+        Route::group(["prefix" => "students"], function () {
+            Route::get("/", [\App\Http\Controllers\StudentController::class, 'index'])->name('dashboard.students');
 
-        Route::post("/students", [\App\Http\Controllers\StudentController::class, 'store'])->name('students.store');
+            Route::get("/{id}", [\App\Http\Controllers\StudentController::class, 'show'])->name('students.show');
 
-        Route::put("/students/{id}", [\App\Http\Controllers\StudentController::class, 'update'])->name('students.update');
+            Route::post("/", [\App\Http\Controllers\StudentController::class, 'store'])->name('students.store');
 
+            Route::put("/{id}", [\App\Http\Controllers\StudentController::class, 'update'])->name('students.update');
 
-        Route::delete("/students/{id}", [\App\Http\Controllers\StudentController::class, 'destroy'])->name('students.destroy');
+            Route::delete("/{id}", [\App\Http\Controllers\StudentController::class, 'destroy'])->name('students.destroy');
+        });
 
+        Route::group(["prefix" => "plans"], function () {
+            Route::get("/", [\App\Http\Controllers\PlanController::class, 'index'])->name('plans.index');
+
+            Route::get("/list", [\App\Http\Controllers\PlanController::class, 'list'])->name('plans.list');
+
+            Route::get("/{id}", [\App\Http\Controllers\PlanController::class, 'show'])->name('plans.show');
+
+            Route::post("/", [\App\Http\Controllers\PlanController::class, 'store'])->name('plans.store');
+
+            Route::put("/{id}", [\App\Http\Controllers\PlanController::class, 'update'])->name('plans.update');
+
+            Route::delete("/{id}", [\App\Http\Controllers\PlanController::class, 'destroy'])->name('plans.destroy');
+        });
 
     });
 });

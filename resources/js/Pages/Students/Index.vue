@@ -10,7 +10,7 @@
                 </button>
 
                 <BaseSelect
-                    placeholder="Selecione o sexo"
+                    placeholder="Selecione o gênero"
                     :options="filtroSexo"
                     width="240px"
                     text-by="name"
@@ -44,7 +44,7 @@
                     <th>Ações</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="students.data.length">
                 <tr v-for="(student,index) in students.data" :key="index">
                     <td>{{ student.name }}</td>
                     <td>{{ student.email }}</td>
@@ -60,6 +60,11 @@
                             excluir
                         </button>
                     </td>
+                </tr>
+                </tbody>
+                <tbody v-if="!loading && students.data.length === 0">
+                <tr>
+                    <td colspan="7" style="text-align: center">Não há registros para esta pesquisa</td>
                 </tr>
                 </tbody>
             </table>

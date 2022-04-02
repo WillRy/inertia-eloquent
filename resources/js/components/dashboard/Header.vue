@@ -7,12 +7,12 @@
         <div class="header-nav">
             <ul>
                 <li>
-                    <Link href="/dashboard/students">
+                    <Link href="/dashboard/students" :class="{active: $page.url.startsWith('/dashboard/students')}">
                         alunos
                     </Link>
                 </li>
                 <li>
-                    <Link href="/dashboard/plans">
+                    <Link href="/dashboard/plans" :class="{active: $page.url.startsWith('/dashboard/plans')}">
                         planos
                     </Link>
                 </li>
@@ -104,7 +104,8 @@ export default {
     padding: 10px;
 }
 
-.header-nav ul li a:hover {
+.header-nav ul li a:hover,
+.header-nav ul li a.active{
     color: #444444;
 }
 

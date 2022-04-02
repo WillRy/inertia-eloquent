@@ -1,0 +1,4 @@
+2022/04/02 18:28:21 [error] 22#22: *2 directory index of "/var/www/public/" is forbidden, client: 192.168.224.1, server: web, request: "GET / HTTP/1.1", host: "localhost:8000"
+2022/04/02 18:28:53 [error] 22#22: *2 directory index of "/var/www/public/" is forbidden, client: 192.168.224.1, server: web, request: "GET / HTTP/1.1", host: "localhost:8000"
+2022/04/02 18:29:23 [error] 22#22: *2 directory index of "/var/www/public/" is forbidden, client: 192.168.224.1, server: web, request: "GET / HTTP/1.1", host: "localhost:8000"
+2022/04/02 18:29:56 [error] 22#22: *2 directory index of "/var/www/public/" is forbidden, client: 192.168.224.1, server: web, request: "GET / HTTP/1.1", host: "localhost:8000"

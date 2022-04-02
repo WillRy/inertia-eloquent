@@ -980,6 +980,7 @@ table tbody td {
 
 .loading {
     position: relative;
+    min-height: 160px;
 }
 .loading:after {
     position: absolute;
