@@ -31,6 +31,24 @@
                 />
             </template>
         </PageHeader>
+        <div class="total-container" v-if="total">
+            <div class="total-box">
+                <img src="/img/qtd.svg" alt="">
+                Total: {{total.qtd}}
+            </div>
+            <div class="total-box">
+                <img src="/img/m.svg" alt="">
+                Masculino: {{total.m}}
+            </div>
+            <div class="total-box">
+                <img src="/img/f.svg" alt="">
+                Feminino: {{total.f}}
+            </div>
+            <div class="total-box">
+                <img src="/img/o.svg" alt="">
+                Outros: {{total.o}}
+            </div>
+        </div>
         <div class="box">
             <table :class="{loading: loading}">
                 <thead>
@@ -44,7 +62,7 @@
                     <th>Ações</th>
                 </tr>
                 </thead>
-                <tbody v-if="students.data.length">
+                <tbody v-if="students && students.data.length">
                 <tr v-for="(student,index) in students.data" :key="index">
                     <td>{{ student.name }}</td>
                     <td>{{ student.email }}</td>
@@ -62,7 +80,7 @@
                     </td>
                 </tr>
                 </tbody>
-                <tbody v-if="!loading && students.data.length === 0">
+                <tbody v-if="!loading && students && students.data.length === 0">
                 <tr>
                     <td colspan="7" style="text-align: center">Não há registros para esta pesquisa</td>
                 </tr>
@@ -108,7 +126,7 @@ export default {
         PageHeader
     },
     layout: Dashboard,
-    props: ["students", "filters", "page"],
+    props: ["students", "total", "filters", "page"],
     data() {
         return {
             abrirModalCadastro: false,
@@ -152,22 +170,24 @@ export default {
             this.genderField = this.filtroSexo.find((item) => item.id == this.filters.gender);
         },
         reload(page) {
-            this.$inertia.get('/dashboard/students', {
-                page: page || this.page,
-                ...(this.searchField ? {search: this.searchField} : {}),
-                ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
-            }, {
-                preservesState: true,
-                onStart: () => {
-                    this.loading = true;
+            this.loading = true;
+
+            this.$inertia.get("/dashboard/students", {}, {
+                only: ['students', 'filters', 'total'],
+                data: {
+                    page: page || this.page,
+                    ...(this.searchField ? {search: this.searchField} : {}),
+                    ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
                 },
-                onFinish: () => {
-                    this.loading = false;
-                }
+                preserveState: true,
+                onSuccess: () => {
+                    this.loading = false
+                },
             });
         }
     },
     created() {
+        this.reload(1);
         this.normalizarFiltroGenero();
     }
 }
@@ -180,4 +200,24 @@ export default {
     border-radius: 4px;
 }
 
+.total-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.total-box {
+    background: #fff;
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.total-box img {
+    width: 60px;
+    margin-right: 5px;
+}
 </style>

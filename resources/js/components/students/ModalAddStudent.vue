@@ -68,7 +68,8 @@
                 </BaseInput>
 
                 <BaseSelect
-                    label="Sexo"
+                    placeholder="Selecione o gênero"
+                    label="Gênero"
                     :options="sexo"
                     text-by="name"
                     track-by="id"

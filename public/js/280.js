@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[280],{280:(e,n,s)=>{s.r(n),s.d(n,{default:()=>u});const t={name:"Index"};const u=(0,s(3744).Z)(t,[["render",function(e,n,s,t,u,c){return" $END$ "}]])}}]);

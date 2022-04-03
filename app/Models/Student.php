@@ -57,4 +57,20 @@ class Student extends Model
             ->paginate(10);
     }
 
+    public function totais()
+    {
+        $totais = [];
+
+        $totais["qtd"] = Student::count();
+
+        $totais["m"] = Student::where("gender","=","m")->count();
+
+        $totais["f"] = Student::where("gender","=","f")->count();
+
+        $totais["o"] = Student::where("gender","=","o")->count();
+
+        return $totais;
+    }
+
+
 }

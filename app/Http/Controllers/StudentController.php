@@ -18,12 +18,13 @@ class StudentController extends Controller
             "search" => $request->input("search")
         ];
 
-        $students = (new Student())->searchStudents($filters);
+//        $students = (new Student())->searchStudents($filters);
 
         return Inertia::render("Students/Index", [
-            "students" => $students,
+            'total' => fn() => (new Student())->totais(), //carrega a primeira vez e sempre que solicitado
+            'students' => Inertia::lazy(fn() => (new Student())->searchStudents($filters)),//carrega só quando solicitado
             "filters" => $filters,
-            "page" => $request->input("page",1)
+            "page" => $request->input("page", 1)
         ]);
     }
 
@@ -47,7 +48,7 @@ class StudentController extends Controller
         try {
             $student = Student::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if (empty($student)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);
@@ -68,7 +69,7 @@ class StudentController extends Controller
         try {
             $student = Student::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if (empty($student)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);
@@ -93,7 +94,7 @@ class StudentController extends Controller
         try {
             $student = Student::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if (empty($student)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);

@@ -29,7 +29,7 @@
                     <th style="width: 200px">Ações</th>
                 </tr>
                 </thead>
-                <tbody v-if="!loading && plans.data">
+                <tbody v-if="plans && plans.data">
                 <tr v-for="(plan,index) in plans.data" :key="index">
                     <td>{{ plan.name }}</td>
                     <td>{{ $filters.dinheiro(plan.price) }}</td>
