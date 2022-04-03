@@ -172,13 +172,12 @@ export default {
         reload(page) {
             this.loading = true;
 
-            this.$inertia.get("/dashboard/students", {}, {
+            this.$inertia.get("/dashboard/students", {
+                page: page || this.page,
+                ...(this.searchField ? {search: this.searchField} : {}),
+                ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
+            }, {
                 only: ['students', 'filters', 'total'],
-                data: {
-                    page: page || this.page,
-                    ...(this.searchField ? {search: this.searchField} : {}),
-                    ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
-                },
                 preserveState: true,
                 onSuccess: () => {
                     this.loading = false
@@ -187,7 +186,6 @@ export default {
         }
     },
     created() {
-        this.reload(1);
         this.normalizarFiltroGenero();
     }
 }

@@ -8,7 +8,7 @@
             <h3>Edição de Plano</h3>
         </template>
         <template #body>
-            <p v-if="plano" class="modal-description">Deseja excluir o plano {{plano.name}}?</p>
+            <p v-if="plano && !loadingDados" class="modal-description">Deseja excluir o plano {{plano.name}}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>
@@ -42,6 +42,7 @@ export default {
     setup: () => ({v$: useVuelidate()}),
     data(){
         return {
+            plano: null,
             form: {
                 name: '',
                 price: '',

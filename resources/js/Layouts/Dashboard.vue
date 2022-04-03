@@ -9,9 +9,32 @@
 
 <script>
 import Header from "../components/dashboard/Header";
+
 export default {
     name: "Dashboard",
     components: {Header},
+    watch: {
+        "$page.props.flash.success": {
+            deep: true,
+            handler(valor) {
+                if (!valor) return;
+                this.$toast.open({
+                    message: valor,
+                    type: 'success',
+                });
+            }
+        },
+        "$page.props.flash.error": {
+            deep: true,
+            handler(valor) {
+                if (!valor) return;
+                this.$toast.open({
+                    message: valor,
+                    type: 'error',
+                });
+            }
+        },
+    }
 }
 </script>
 

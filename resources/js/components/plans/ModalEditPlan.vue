@@ -123,6 +123,7 @@ export default {
             })
         },
         fecharModal() {
+            this.v$.$reset();
             this.SET_PLANOS_ID_EDICAO(null);
             this.$emit("onClose");
         },

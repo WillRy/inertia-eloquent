@@ -8,7 +8,7 @@
             <h3>Exclusão de Aluno</h3>
         </template>
         <template #body>
-            <p class="modal-description" v-if="student">Deseja excluir o aluno {{student.name}}?</p>
+            <p class="modal-description" v-if="student && !loadingDados">Deseja excluir o aluno {{student.name}}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>
@@ -69,19 +69,27 @@ export default {
         },
         async submit() {
             this.loading = true;
-            axios.delete(`/dashboard/students/${this.aluno_id}`).then((response) => {
-                this.fecharModal();
-                this.$toast.open({
-                    type: 'success',
-                    message: 'Aluno excluido com sucesso'
-                });
-                //envia sinal de reload para outros componentes
-                this.SET_ALUNOS_RELOAD(response.data);
-            }).catch((error) => {
-                this.$laravelError(error, 'Não foi possível excluir o aluno')
-            }).finally(() => {
-                this.loading = false;
+            this.$inertia.delete(`/dashboard/students/${this.aluno_id}`, {
+                onSuccess: () => {
+                    this.fecharModal();
+                },
+                onFinish: () => {
+                    this.loading = false;
+                }
             })
+            // axios.delete(`/dashboard/students/${this.aluno_id}`).then((response) => {
+            //     this.fecharModal();
+            //     this.$toast.open({
+            //         type: 'success',
+            //         message: 'Aluno excluido com sucesso'
+            //     });
+            //     //envia sinal de reload para outros componentes
+            //     this.SET_ALUNOS_RELOAD(response.data);
+            // }).catch((error) => {
+            //     this.$laravelError(error, 'Não foi possível excluir o aluno')
+            // }).finally(() => {
+            //     this.loading = false;
+            // })
         }
     }
 }

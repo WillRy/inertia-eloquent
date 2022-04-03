@@ -22,7 +22,7 @@ class StudentController extends Controller
 
         return Inertia::render("Students/Index", [
             'total' => fn() => (new Student())->totais(), //carrega a primeira vez e sempre que solicitado
-            'students' => Inertia::lazy(fn() => (new Student())->searchStudents($filters)),//carrega só quando solicitado
+            'students' => fn() => (new Student())->searchStudents($filters),//carrega a primeira vez e sempre que solicitado
             "filters" => $filters,
             "page" => $request->input("page", 1)
         ]);
@@ -103,11 +103,17 @@ class StudentController extends Controller
             $student->delete();
 
 
-            return response()->json([], 204);
+//            return response()->json([], 204);
+            return redirect()->back()->with([
+                "success" => "Aluno excluido com sucesso"
+            ]);
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+//            return response()->json([
+//                "error" => $e->getMessage()
+//            ], 500);
+            return redirect()->back()
+                ->with(["error" => $e->getMessage()])
+                ->withErrors([]);
         }
     }
 

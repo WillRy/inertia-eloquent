@@ -171,6 +171,7 @@ export default {
             })
         },
         fecharModal() {
+            this.v$.$reset();
             this.$emit("onClose");
             this.SET_ALUNOS_ID_EDICAO(null);
         },

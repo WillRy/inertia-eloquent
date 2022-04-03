@@ -102,6 +102,7 @@ export default {
         ]),
         carregarFormulario(){},
         fecharModal() {
+            this.v$.$reset();
             this.$emit("onClose");
         },
         async submit() {
