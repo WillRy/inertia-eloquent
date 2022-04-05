@@ -16,7 +16,8 @@
             deselectLabel=""
             deselectGroupLabel=""
         />
-        <div class="errorMessage">
+        <div class="errorMessage" v-if="error || $slots.error">
+            <div>{{error}}</div>
             <slot name="error"></slot>
         </div>
     </div>
@@ -60,6 +61,10 @@ export default {
         empty: {
             type: Boolean,
             default: false
+        },
+        error: {
+            type: String,
+            default: null
         }
     },
     computed: {
@@ -89,6 +94,11 @@ export default {
     margin-bottom: 8px;
     text-transform: uppercase;
     display: block;
+}
+
+/deep/ .errorMessage > div{
+    margin: 3px 0;
+    color: red;
 }
 
 </style>

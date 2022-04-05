@@ -33,13 +33,14 @@ class StudentController extends Controller
         try {
             $student = Student::create($request->all());
 
-            return response()->json([
-                "data" => $student
+            return redirect()->back()->with([
+                "data" => $student,
+                "success" => "Aluno criado com sucesso!"
             ]);
         } catch (\Exception $e) {
-            return response()->json([
+            return redirect()->back()->with([
                 "error" => $e->getMessage()
-            ], 500);
+            ])->withErrors([]);
         }
     }
 
@@ -79,13 +80,14 @@ class StudentController extends Controller
             $student->save();
 
 
-            return response()->json([
-                "data" => $student
+            return redirect()->back()->with([
+                "data" => $student,
+                "success" => "Aluno criado com sucesso!"
             ]);
         } catch (\Exception $e) {
-            return response()->json([
+            return redirect()->back()->with([
                 "error" => $e->getMessage()
-            ], 500);
+            ])->withErrors([]);
         }
     }
 

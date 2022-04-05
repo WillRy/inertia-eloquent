@@ -59,12 +59,13 @@ export default {
         data: {
             set(valor) {
                 if(valor) {
-                    let data = typeof valor === "string" ? new Date(`${valor}T00:00:00`) : valor;
+                    let data = typeof valor === "string" && valor ? new Date(`${valor}T00:00:00`) : valor;
                     this.$emit('update:modelValue', data);
                 }
+                return '';
             },
             get() {
-                return typeof this.modelValue === "string" ? new Date(`${this.modelValue}T00:00:00`) : this.modelValue
+                return typeof this.modelValue === "string" && this.modelValue ? new Date(`${this.modelValue}T00:00:00`) : this.modelValue
             }
         },
         formatado() {
@@ -77,7 +78,11 @@ export default {
     },
     methods: {
         emitirData() {
-            this.$emit('update:modelValue', this.data);
+          debugger;
+            if(this.data) {
+              this.$emit('update:modelValue', this.data);
+              this.$emit('change', this.data);
+            }
         },
     },
     created() {

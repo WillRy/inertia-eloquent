@@ -24,7 +24,7 @@
                 <BaseInput
                     label="Preço"
                     type="text"
-                    v-mask="'##.##'"
+                    v-mask="currencyMask"
                     v-model="form.price"
                     :class="{error: v$.form.price.$error}"
                 >
@@ -69,6 +69,13 @@ import axios from 'axios';
 import {mapMutations} from 'vuex';
 import BaseSelect from "../forms/BaseSelect";
 
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+const currencyMask = createNumberMask({
+    prefix: '',
+    allowDecimal: true,
+    includeThousandsSeparator: true,
+    allowNegative: false,
+})
 
 export default {
     name: "Plan",
@@ -79,6 +86,7 @@ export default {
     setup: () => ({v$: useVuelidate()}),
     data(){
         return {
+            currencyMask: currencyMask,
             form: {
                 name: '',
                 price: '',
