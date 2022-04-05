@@ -134,6 +134,10 @@ table tbody td {
     padding: 18px 0;
 }
 
+table tr+tr {
+    border-top: 1px solid #ccc;
+}
+
 
 .link-action {
     text-decoration: none;
