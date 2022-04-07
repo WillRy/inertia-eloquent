@@ -135,6 +135,7 @@ export default {
             'SET_PLANOS_ID_EDICAO',
             'SET_PLANOS_ID_EXCLUSAO',
             'SET_PLANOS_FILTRO_PESQUISA',
+            'SET_PLANOS_FILTRO_PAGINA'
         ]),
         ...mapActions([
             'returnPlanos'

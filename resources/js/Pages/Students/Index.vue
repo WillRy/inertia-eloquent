@@ -186,6 +186,7 @@ export default {
         }
     },
     created() {
+        console.log("created executou");
         this.normalizarFiltroGenero();
     }
 }
