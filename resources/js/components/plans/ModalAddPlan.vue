@@ -84,7 +84,7 @@ export default {
         aberta: Boolean
     },
     setup: () => ({v$: useVuelidate()}),
-    data(){
+    data() {
         return {
             currencyMask: currencyMask,
             form: {
@@ -108,7 +108,8 @@ export default {
         ...mapMutations([
             'SET_PLANOS_RELOAD'
         ]),
-        carregarFormulario(){},
+        carregarFormulario() {
+        },
         fecharModal() {
             this.v$.$reset();
             this.$emit("onClose");
@@ -118,7 +119,7 @@ export default {
             if (result) {
                 this.loading = true;
 
-                axios.post("/dashboard/plans", this.form).then((response)=>{
+                axios.post("/dashboard/plans", this.form).then((response) => {
                     this.fecharModal();
                     this.$toast.open({
                         type: 'success',
@@ -126,9 +127,9 @@ export default {
                     });
                     //envia sinal de reload para outros componentes
                     this.SET_PLANOS_RELOAD(response.data);
-                }).catch((error)=>{
+                }).catch((error) => {
                     this.$laravelError(error, 'Não foi possível cadastrar o plano')
-                }).finally(()=>{
+                }).finally(() => {
                     this.loading = false;
                 })
             }

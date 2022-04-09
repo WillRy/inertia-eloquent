@@ -8,7 +8,7 @@
             <h3>Exclusão de Aluno</h3>
         </template>
         <template #body>
-            <p class="modal-description" v-if="student && !loadingDados">Deseja excluir o aluno {{student.name}}?</p>
+            <p class="modal-description" v-if="student && !loadingDados">Deseja excluir o aluno {{ student.name }}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>

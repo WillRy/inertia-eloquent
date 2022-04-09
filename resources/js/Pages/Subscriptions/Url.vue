@@ -19,7 +19,6 @@
                     :limit="3"
                     @search-change="pesquisarPlanos"
                     @change="pesquisar"
-                    width="240px"
                     mb="0px"
                     :clear="true"
                 >
@@ -28,7 +27,6 @@
                 <BaseInput
                     type="text"
                     placeholder="Pesquisa por aluno"
-                    width="240px"
                     mb="0px"
                     @keyup.enter="pesquisar"
                     v-model="search"
@@ -42,7 +40,7 @@
                 :key="dados.id"
             />
         </div>
-        <Loader v-if="loading" width="120px" height="120px" fill="#020540"/>
+        <Loader v-if="loading" width="120px" height="120px" fill="#6d74ed"/>
 
         <ModalAddSubscription
             :aberta="abrirModalCadastro"
@@ -135,8 +133,8 @@ export default {
         ...mapActions([
             'returnPlanos'
         ]),
-        pesquisarPlanos(pesquisa){
-            axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response)=>{
+        pesquisarPlanos(pesquisa) {
+            axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response) => {
                 this.plans = response.data.data;
                 this.plans.unshift({
                     id: '',
@@ -153,13 +151,13 @@ export default {
                 // preserveState: true
             })
         },
-        aumentarPagina: debounce( function(){
+        aumentarPagina: debounce(function () {
             let bottomOfWindow = Math.ceil(window.innerHeight + window.scrollY) + 60 >= document.body.scrollHeight;
             if (bottomOfWindow && this.page < this.paginaTotal && !this.loading) {
                 this.page++;
                 this.carregarDados();
             }
-        }, 1000),
+        }, 500),
         async carregarDados() {
             this.loading = true;
 

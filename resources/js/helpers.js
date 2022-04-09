@@ -1,4 +1,4 @@
-export function debounce (fn, delay) {
+export function debounce(fn, delay) {
     var timeoutID = null
     return function () {
         clearTimeout(timeoutID)

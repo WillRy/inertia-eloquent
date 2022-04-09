@@ -1,6 +1,6 @@
 <template>
     <div class="form-group" :style="{'margin-bottom': mb, width: width}">
-        <label v-if="label" :for="$attrs.id">{{label}}</label>
+        <label v-if="label" :for="$attrs.id">{{ label }}</label>
         <VueMultiselect
             @update:model-value="updateValue"
             :model-value="modelValue"
@@ -15,9 +15,13 @@
             selectedLabel=""
             deselectLabel=""
             deselectGroupLabel=""
-        />
+        >
+            <template #noOptions v-if="noOptions">
+                {{ noOptions }}
+            </template>
+        </VueMultiselect>
         <div class="errorMessage" v-if="error || $slots.error">
-            <div>{{error}}</div>
+            <div>{{ error }}</div>
             <slot name="error"></slot>
         </div>
     </div>
@@ -29,10 +33,14 @@ import VueMultiselect from 'vue-multiselect'
 export default {
     name: "BaseSelect",
     inheritAttrs: false,
-    components:{
+    components: {
         VueMultiselect
     },
     props: {
+        noOptions: {
+            type: String,
+            default: 'Digite sua pesquisa'
+        },
         label: {
             type: String,
             default: ''
@@ -97,7 +105,7 @@ export default {
     display: block;
 }
 
-/deep/ .errorMessage > div{
+/deep/ .errorMessage > div {
     margin: 3px 0;
     color: red;
 }

@@ -16,7 +16,7 @@ export default createStore({
         matriculas_id_exclusao: null,
     },
     actions: {
-        returnPlanos(context){
+        returnPlanos(context) {
             let search = context.state.planos_filtro_pesquisa || '';
             let page = context.state.planos_filtro_pagina || 1;
             /** retorna promise**/

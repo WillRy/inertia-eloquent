@@ -8,7 +8,7 @@
             <h3>Edição de Plano</h3>
         </template>
         <template #body>
-            <p v-if="plano && !loadingDados" class="modal-description">Deseja excluir o plano {{plano.name}}?</p>
+            <p v-if="plano && !loadingDados" class="modal-description">Deseja excluir o plano {{ plano.name }}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>
@@ -38,7 +38,7 @@ export default {
         aberta: Boolean
     },
     setup: () => ({v$: useVuelidate()}),
-    data(){
+    data() {
         return {
             plano: null,
             loading: false,
@@ -46,7 +46,7 @@ export default {
         }
     },
 
-    computed:{
+    computed: {
         ...mapState({
             'plano_id': 'planos_id_exclusao'
         })
@@ -56,17 +56,17 @@ export default {
             'SET_PLANOS_RELOAD',
             'SET_PLANOS_ID_EXCLUSAO'
         ]),
-        carregarFormulario(){
+        carregarFormulario() {
             this.loadingDados = true;
-            axios.get(`/dashboard/plans/${this.plano_id}`).then((response)=>{
+            axios.get(`/dashboard/plans/${this.plano_id}`).then((response) => {
                 this.plano = response.data.data;
-            }).catch(()=>{
+            }).catch(() => {
                 this.$toast.open({
                     type: 'error',
                     message: 'Não foi possível exibir o plano!'
                 });
                 this.fecharModal();
-            }).finally(()=>{
+            }).finally(() => {
                 this.loadingDados = false;
             })
         },
@@ -76,7 +76,7 @@ export default {
         },
         async submit() {
             this.loading = true;
-            axios.delete(`/dashboard/plans/${this.plano_id}`).then((response)=>{
+            axios.delete(`/dashboard/plans/${this.plano_id}`).then((response) => {
                 this.fecharModal();
                 this.$toast.open({
                     type: 'success',
@@ -84,9 +84,9 @@ export default {
                 });
                 //envia sinal de reload para outros componentes
                 this.SET_PLANOS_RELOAD(response.data);
-            }).catch((error)=>{
+            }).catch((error) => {
                 this.$laravelError(error, 'Não foi possível excluir o plano')
-            }).finally(()=>{
+            }).finally(() => {
                 this.loading = false;
             })
         }

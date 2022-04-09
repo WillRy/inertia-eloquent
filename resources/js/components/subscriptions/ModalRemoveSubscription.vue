@@ -8,7 +8,8 @@
             <h3>Exclusão de Matrícula</h3>
         </template>
         <template #body>
-            <p v-if="subscription && !loadingDados" class="modal-description">Deseja excluir a matrícula do aluno {{ subscription.student.name }}?</p>
+            <p v-if="subscription && !loadingDados" class="modal-description">Deseja excluir a matrícula do aluno
+                {{ subscription.student.name }}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>

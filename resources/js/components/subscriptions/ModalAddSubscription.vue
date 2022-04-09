@@ -90,7 +90,7 @@ export default {
         aberta: Boolean
     },
     setup: () => ({v$: useVuelidate()}),
-    data(){
+    data() {
         return {
             alunos: [],
             planos: [],
@@ -115,7 +115,7 @@ export default {
         ...mapMutations([
             'SET_MATRICULAS_RELOAD'
         ]),
-        carregarFormulario(){
+        carregarFormulario() {
             this.form = {
                 aluno: null,
                 plano: null,
@@ -126,13 +126,13 @@ export default {
             this.v$.$reset();
             this.$emit("onClose");
         },
-        pesquisarAlunos(pesquisa){
-            axios.get("/dashboard/students/list", {params: {search: pesquisa}}).then((response)=>{
+        pesquisarAlunos(pesquisa) {
+            axios.get("/dashboard/students/list", {params: {search: pesquisa}}).then((response) => {
                 this.alunos = response.data.data;
             });
         },
-        pesquisarPlanos(pesquisa){
-            axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response)=>{
+        pesquisarPlanos(pesquisa) {
+            axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response) => {
                 this.planos = response.data.data;
             });
         },
@@ -147,7 +147,7 @@ export default {
                     plan_id: this.form.plano ? this.form.plano.id : '',
                 }
 
-                axios.post("/dashboard/subscriptions", dados).then((response)=>{
+                axios.post("/dashboard/subscriptions", dados).then((response) => {
                     this.fecharModal();
                     this.$toast.open({
                         type: 'success',
@@ -158,9 +158,9 @@ export default {
                         ...response.data.data,
                         tipo: 'criacao'
                     });
-                }).catch((error)=>{
+                }).catch((error) => {
                     this.$laravelError(error, 'Não foi possível cadastrar a matrícula')
-                }).finally(()=>{
+                }).finally(() => {
                     this.loading = false;
                 });
             }

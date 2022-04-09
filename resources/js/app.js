@@ -4,6 +4,7 @@ import VueToast from "vue-toast-notification"
 import Loader from "./components/Loader";
 import {DatePicker} from 'v-calendar';
 import {VueMaskDirective} from 'v-mask';
+import outside from './click-outside';
 
 import store from './store/index'
 
@@ -18,7 +19,7 @@ let LaravelError = {
                     message: response.data.errors[erro][0],
                     type: 'error'
                 });
-            } else if(response && response.data.error){
+            } else if (response && response.data.error) {
                 app.config.globalProperties.$toast.open({
                     message: response.data.error,
                     type: 'error'
@@ -58,7 +59,7 @@ let filters = {
 
 let debounce = {
     install: (app, options) => {
-        app.config.globalProperties.$debounce = function(){
+        app.config.globalProperties.$debounce = function () {
             let timeout = null;
             return function (fnc, delayMs) {
                 clearTimeout(timeout);
@@ -79,13 +80,14 @@ const vMaskV3 = {
 
 createInertiaApp({
     resolve: name => import(`./Pages/${name}`),
-    setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
+    setup({el, App, props, plugin}) {
+        createApp({render: () => h(App, props)})
             .use(plugin)
             .use(VueToast)
             .use(LaravelError)
             .use(debounce)
             .use(filters)
+            .use(outside)
             .use(store)
             .component('Loader', Loader)
             .component('DatePicker', DatePicker)

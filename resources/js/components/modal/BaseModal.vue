@@ -56,44 +56,6 @@ export default {
             }
         }
     },
-    directives: {
-        'click-outside': {
-            bind(el, binding, vnode) {
-
-                vnode.context.handleClickOutside = (e) => {
-                    e.stopPropagation()
-                    const {handler, exclude} = binding.value
-                    let clickedOnExcludedEl = false
-
-// Gives you the ability to exclude certain elements if you want, pass as array of strings to exclude
-                    if (exclude) {
-                        exclude.forEach(refName => {
-                            if (!clickedOnExcludedEl) {
-                                const excludedEl = vnode.context.$refs[refName]
-                                clickedOnExcludedEl = excludedEl.contains(e.target)
-                            }
-                        })
-                    }
-
-                    let naoFechaSeDropdownAberto = !el.contains(el.querySelector('.vs__dropdown-menu'));
-                    if (!el.contains(e.target) && !clickedOnExcludedEl && naoFechaSeDropdownAberto) {
-                        handler(e)
-                    }
-                }
-
-                setTimeout(() => {
-                    document.addEventListener('click', vnode.context.handleClickOutside)
-                    document.addEventListener('touchstart', vnode.context.handleClickOutside)
-                });
-
-            },
-
-            unbind(el, binding, vnode) {
-                document.removeEventListener('click', vnode.context.handleClickOutside)
-                document.removeEventListener('touchstart', vnode.context.handleClickOutside)
-            }
-        }
-    }
 }
 </script>
 <style>

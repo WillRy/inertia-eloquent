@@ -12,7 +12,6 @@
                 <BaseInput
                     type="text"
                     placeholder="Pesquisa por nome ou valor"
-                    width="240px"
                     mb="0px"
                     @keyup.enter="pesquisar"
                     v-model="search"
@@ -144,7 +143,7 @@ export default {
         abrirExclusao(id) {
             this.SET_PLANOS_ID_EXCLUSAO(id);
         },
-        pesquisar(){
+        pesquisar() {
             this.carregarDados();
         },
         updatePagina(page) {
@@ -155,9 +154,9 @@ export default {
             this.loading = true;
             this.returnPlanos().then((response) => {
                 this.plans = response.data
-            }).catch(()=>{
+            }).catch(() => {
 
-            }).finally(()=>{
+            }).finally(() => {
                 this.loading = false;
             })
 
@@ -174,6 +173,7 @@ export default {
     padding: 30px;
     background: #FFFFFF;
     border-radius: 4px;
+    overflow-x: auto;
 }
 
 </style>

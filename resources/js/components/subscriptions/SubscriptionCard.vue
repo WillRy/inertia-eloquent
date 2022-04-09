@@ -1,24 +1,24 @@
 <template>
-<div class="subscription-card">
-    <h2>{{subscription.student.name}}</h2>
-    <span>{{subscription.plan.name}}</span>
-    <div class="subscription-card-details">
-        <div>
-            Início: {{subscription.dt_start}}
+    <div class="subscription-card">
+        <h2>{{ subscription.student.name }}</h2>
+        <span>{{ subscription.plan.name }}</span>
+        <div class="subscription-card-details">
+            <div>
+                Início: {{ $filters.data(subscription.dt_start) }}
+            </div>
+            <div>
+                Fim: {{ $filters.data(subscription.dt_end) }}
+            </div>
         </div>
-        <div>
-            Fim: {{subscription.dt_end}}
+        <div class="subscription-card-actions">
+            <button class="btn btn-full btn-primary" @click="abrirEdicao">
+                Editar
+            </button>
+            <button class="btn btn-full btn-danger" @click="abrirExclusao">
+                Excluir
+            </button>
         </div>
     </div>
-    <div class="subscription-card-actions">
-        <button class="btn btn-full btn-primary" @click="abrirEdicao">
-            Editar
-        </button>
-        <button class="btn btn-full btn-danger" @click="abrirExclusao">
-            Excluir
-        </button>
-    </div>
-</div>
 </template>
 
 <script>
@@ -27,12 +27,12 @@ import {mapMutations} from "vuex";
 export default {
     name: "SubscriptionCard",
     props: ["data"],
-    data(){
+    data() {
         return {
             subscription: this.data
         }
     },
-    methods:{
+    methods: {
         ...mapMutations([
             'SET_MATRICULAS_ID_EDICAO',
             'SET_MATRICULAS_ID_EXCLUSAO'
@@ -45,7 +45,7 @@ export default {
         },
     },
     watch: {
-        data(valor){
+        data(valor) {
             this.subscription = valor;
         }
     }

@@ -203,5 +203,6 @@ table tr+tr {
 .box-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 32%));
-    gap: 24px;
+    gap: 22px;
+    justify-content: center;
 }

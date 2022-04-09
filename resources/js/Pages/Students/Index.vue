@@ -12,7 +12,6 @@
                 <BaseSelect
                     placeholder="Selecione o gênero"
                     :options="filtroSexo"
-                    width="240px"
                     text-by="name"
                     track-by="id"
                     mb="0px"
@@ -24,7 +23,6 @@
                 <BaseInput
                     type="text"
                     placeholder="Pesquisa por nome e email"
-                    width="240px"
                     mb="0px"
                     @keyup.enter="reload(1)"
                     v-model="searchField"
@@ -34,19 +32,19 @@
         <div class="total-container" v-if="total">
             <div class="total-box">
                 <img src="/img/qtd.svg" alt="">
-                Total: {{total.qtd}}
+                Total: {{ total.qtd }}
             </div>
             <div class="total-box">
                 <img src="/img/m.svg" alt="">
-                Masculino: {{total.m}}
+                Masculino: {{ total.m }}
             </div>
             <div class="total-box">
                 <img src="/img/f.svg" alt="">
-                Feminino: {{total.f}}
+                Feminino: {{ total.f }}
             </div>
             <div class="total-box">
                 <img src="/img/o.svg" alt="">
-                Outros: {{total.o}}
+                Outros: {{ total.o }}
             </div>
         </div>
         <div class="box">
@@ -197,6 +195,7 @@ export default {
     padding: 30px;
     background: #FFFFFF;
     border-radius: 4px;
+    overflow-x: auto;
 }
 
 .total-container {

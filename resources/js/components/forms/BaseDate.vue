@@ -21,7 +21,7 @@
             </template>
         </DatePicker>
         <div class="errorMessage" v-if="error">
-            <div>{{error}}</div>
+            <div>{{ error }}</div>
         </div>
     </div>
 </template>
@@ -63,7 +63,7 @@ export default {
         },
         data: {
             set(valor) {
-                if(valor) {
+                if (valor) {
                     let objeto = moment(valor);
                     let string = moment(valor).format("Y-MM-DD");
                     this.$emit('update:modelValue', objeto);
@@ -79,12 +79,12 @@ export default {
     },
     methods: {
         emitirData() {
-            if(this.data) {
-              this.$emit('update:modelValue', this.data);
-              this.$emit('change', this.data);
+            if (this.data) {
+                this.$emit('update:modelValue', this.data);
+                this.$emit('change', this.data);
 
-              this.$emit('update:formatado', this.formatado);
-              this.$emit('changeFormatado', this.formatado);
+                this.$emit('update:formatado', this.formatado);
+                this.$emit('changeFormatado', this.formatado);
             }
         },
     },
@@ -104,6 +104,7 @@ export default {
     text-transform: uppercase;
     display: block;
 }
+
 .form-group input {
     background: #FFFFFF;
     border: 1px solid var(--cor-borda-principal);
@@ -114,6 +115,7 @@ export default {
     height: 100%;
     color: var(--cor-texto-secundario);
 }
+
 .form-group input::placeholder {
     font-family: 'Roboto', sans-serif;
     font-style: normal;

@@ -76,7 +76,7 @@ export default {
         aberta: Boolean
     },
     setup: () => ({v$: useVuelidate()}),
-    data(){
+    data() {
         return {
             form: {
                 name: '',
@@ -96,7 +96,7 @@ export default {
             }
         }
     },
-    computed:{
+    computed: {
         ...mapState({
             'plano_id': 'planos_id_edicao'
         })
@@ -106,18 +106,18 @@ export default {
             'SET_PLANOS_RELOAD',
             'SET_PLANOS_ID_EDICAO'
         ]),
-        carregarFormulario(){
+        carregarFormulario() {
             this.loadingDados = true;
-            axios.get(`/dashboard/plans/${this.plano_id}`).then((response)=>{
+            axios.get(`/dashboard/plans/${this.plano_id}`).then((response) => {
                 // this.plano = response.data.data;
-                Object.assign(this.form,response.data.data)
-            }).catch(()=>{
+                Object.assign(this.form, response.data.data)
+            }).catch(() => {
                 this.$toast.open({
                     type: 'error',
                     message: 'Não foi possível exibir o plano!'
                 });
                 this.fecharModal();
-            }).finally(()=>{
+            }).finally(() => {
                 this.loadingDados = false;
             })
         },
@@ -131,7 +131,7 @@ export default {
             if (result) {
                 this.loading = true;
 
-                axios.put(`/dashboard/plans/${this.plano_id}`, this.form).then((response)=>{
+                axios.put(`/dashboard/plans/${this.plano_id}`, this.form).then((response) => {
                     this.fecharModal();
                     this.$toast.open({
                         type: 'success',
@@ -139,9 +139,9 @@ export default {
                     });
                     //envia sinal de reload para outros componentes
                     this.SET_PLANOS_RELOAD(response.data);
-                }).catch((error)=>{
+                }).catch((error) => {
                     this.$laravelError(error, 'Não foi possível editar o plano')
-                }).finally(()=>{
+                }).finally(() => {
                     this.loading = false;
                 })
             }

@@ -17,8 +17,9 @@ export default {
 
 <style scoped>
 .page-header {
-    display: flex;
     align-items: center;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 24px;
 }
@@ -32,11 +33,13 @@ export default {
 }
 
 .page-header-actions {
-    display: flex;
     align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-/deep/ .page-header-actions > *:not(:last-child) {
-    margin-right: 16px;
+/deep/ .page-header-actions > * {
+    min-width: 260px;
 }
 </style>

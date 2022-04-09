@@ -3,7 +3,7 @@
         <label v-if="label" :for="$attrs.id">{{ label }}</label>
         <input type="text" :value="modelValue" @input="updateValue" v-bind="attrs">
         <div class="errorMessage" v-if="error || $slots.error">
-            <div>{{error}}</div>
+            <div>{{ error }}</div>
             <slot name="error"></slot>
         </div>
     </div>
@@ -69,7 +69,7 @@ input {
     min-height: 50px;
 }
 
-/deep/ .errorMessage > div{
+/deep/ .errorMessage > div {
     margin: 3px 0;
     color: red;
 }
