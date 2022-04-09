@@ -56,6 +56,20 @@ let filters = {
     }
 }
 
+let debounce = {
+    install: (app, options) => {
+        app.config.globalProperties.$debounce = function(){
+            let timeout = null;
+            return function (fnc, delayMs) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    fnc();
+                }, delayMs || 500);
+            };
+        }()
+    }
+}
+
 const vMaskV2 = VueMaskDirective;
 const vMaskV3 = {
     beforeMount: vMaskV2.bind,
@@ -70,6 +84,7 @@ createInertiaApp({
             .use(plugin)
             .use(VueToast)
             .use(LaravelError)
+            .use(debounce)
             .use(filters)
             .use(store)
             .component('Loader', Loader)

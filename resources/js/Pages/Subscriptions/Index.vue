@@ -71,6 +71,7 @@ import axios from "axios";
 import SubscriptionCard from "../../components/subscriptions/SubscriptionCard";
 import Loader from "../../components/Loader";
 import ModalRemoveSubscription from "../../components/subscriptions/ModalRemoveSubscription";
+import {debounce} from '../../helpers';
 
 export default {
     name: "Index",
@@ -142,14 +143,13 @@ export default {
             this.page = 1;
             this.carregarDados();
         },
-        aumentarPagina() {
-
+        aumentarPagina: debounce( function(){
             let bottomOfWindow = Math.ceil(window.innerHeight + window.scrollY) + 60 >= document.body.scrollHeight;
             if (bottomOfWindow && this.page < this.paginaTotal && !this.loading) {
                 this.page++;
                 this.carregarDados();
             }
-        },
+        }, 1000),
         async carregarDados() {
             this.loading = true;
 
@@ -165,6 +165,8 @@ export default {
                 let newValues = response.data.data.data ? response.data.data.data : [];
                 let data = [];
 
+                //se nao for primeira pagina, concatena novos itens
+                //se primeira pagina, pega só os novos itens
                 if (response.data.data.current_page > 1) {
                     data = [...oldValues, ...newValues];
                 } else {
@@ -181,7 +183,7 @@ export default {
 
                 //aumenta a página caso existam mais espaço em tela para exibir mais paginas
                 //em caso de monitores muito altos
-                // this.aumentarPagina();
+                this.aumentarPagina();
             }).catch((e) => {
                 console.log(e);
             }).finally(() => {
