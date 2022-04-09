@@ -65,6 +65,8 @@ Route::group(["middleware" => "auth:web"], function () {
         Route::group(["prefix" => "subscriptions"], function () {
             Route::get("/", [SubscriptionController::class, 'index'])->name('subscriptions.index');
 
+            Route::get("/url", [SubscriptionController::class, 'url'])->name('subscriptions.url');
+
             Route::get("/list", [SubscriptionController::class, 'list'])->name('subscriptions.list');
 
             Route::get("/{subscription}", [SubscriptionController::class, 'show'])->name('subscriptions.show');

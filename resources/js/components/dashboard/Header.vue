@@ -7,18 +7,23 @@
         <div class="header-nav">
             <ul>
                 <li>
-                    <Link href="/dashboard/students" :class="{active: $page.url.startsWith('/dashboard/students')}">
+                    <Link href="/dashboard/students" :class="{active: $page.url.endsWith('/dashboard/students')}">
                         alunos
                     </Link>
                 </li>
                 <li>
-                    <Link href="/dashboard/plans" :class="{active: $page.url.startsWith('/dashboard/plans')}">
+                    <Link href="/dashboard/plans" :class="{active: $page.url.endsWith('/dashboard/plans')}">
                         planos
                     </Link>
                 </li>
                 <li>
-                    <Link href="/dashboard/subscriptions">
+                    <Link href="/dashboard/subscriptions" :class="{active: $page.url.endsWith('/dashboard/subscriptions')}">
                         matriculas
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/dashboard/subscriptions/url" :class="{active: $page.url.endsWith('/dashboard/subscriptions/url')}">
+                        matriculas (filtro url)
                     </Link>
                 </li>
             </ul>

@@ -16,6 +16,17 @@ class SubscriptionController extends Controller
         return Inertia::render("Subscriptions/Index");
     }
 
+    public function url(Request $request)
+    {
+        $plan = Plan::find($request->input("plan"));
+        $filters = [
+            "searchURL" => $request->input("search"),
+            "planURL" => $plan
+        ];
+
+        return Inertia::render("Subscriptions/Url", $filters);
+    }
+
     public function list(Request $request)
     {
         try {
