@@ -35,7 +35,7 @@
 
                 <BaseDate
                     label="Data de Início"
-                    v-model="form.dt_start"
+                    v-model:formatado="form.dt_start"
                 >
                     <template v-slot:error>
                         <div v-if="v$.form.dt_start.$error">
@@ -127,12 +127,7 @@ export default {
             if (result) {
                 this.loading = true;
 
-                let dados = {
-                    ...this.form,
-                    dt_start: this.form.dt_start ? this.form.dt_start.toISOString().split('T')[0] : '',
-                }
-
-                axios.put(`/dashboard/subscriptions/${this.matricula_id}`, dados).then((response) => {
+                axios.put(`/dashboard/subscriptions/${this.matricula_id}`, this.form).then((response) => {
                     this.fecharModal();
                     this.$toast.open({
                         type: 'success',

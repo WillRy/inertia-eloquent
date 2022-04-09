@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     name: "BaseDate",
     inheritAttrs: false,
@@ -48,6 +50,9 @@ export default {
         },
         disabled: {
             default: false
+        },
+        formatado: {
+            type: [String, Date]
         }
     },
     computed: {
@@ -59,29 +64,27 @@ export default {
         data: {
             set(valor) {
                 if(valor) {
-                    let data = typeof valor === "string" && valor ? new Date(`${valor}T00:00:00`) : valor;
-                    this.$emit('update:modelValue', data);
+                    let objeto = moment(valor);
+                    let string = moment(valor).format("Y-MM-DD");
+                    this.$emit('update:modelValue', objeto);
+                    this.$emit('update:formatado', string);
                 }
                 return '';
             },
             get() {
-                return typeof this.modelValue === "string" && this.modelValue ? new Date(`${this.modelValue}T00:00:00`) : this.modelValue
+                let valor = this.modelValue || this.formatado;
+                return moment(valor).toDate();
             }
         },
-        formatado() {
-            if (this.modelValue) {
-                let data = typeof this.modelValue === "string" ? new Date(`${this.modelValue}T00:00:00`) : this.modelValue
-                return data.toLocaleDateString().split('T')[0];
-            }
-            return '';
-        }
     },
     methods: {
         emitirData() {
-          debugger;
             if(this.data) {
               this.$emit('update:modelValue', this.data);
               this.$emit('change', this.data);
+
+              this.$emit('update:formatado', this.formatado);
+              this.$emit('changeFormatado', this.formatado);
             }
         },
     },

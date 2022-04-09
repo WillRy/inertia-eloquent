@@ -19,13 +19,18 @@ if(mix.inProduction()) {
 }
 
 mix.js('resources/js/app.js', 'public/js')
+    .options({
+        terser: {
+            extractComments: false,
+        }
+    })
     .vue()
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]).webpackConfig({
         output: {
             chunkFilename: 'js/[name].js?id=[chunkhash]',
-        }
+        },
     }).browserSync({
         // fixes pagination urls otherwise they get re-written to use the service `container_name`...
         host: 'localhost:8000',

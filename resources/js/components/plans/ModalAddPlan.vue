@@ -62,7 +62,6 @@
 <script>
 import BaseModal from "../modal/BaseModal";
 import BaseInput from "../forms/BaseInput";
-import BaseDate from "../forms/BaseDate";
 import useVuelidate from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
 import axios from 'axios';
@@ -80,7 +79,7 @@ const currencyMask = createNumberMask({
 
 export default {
     name: "Plan",
-    components: {BaseSelect, BaseInput, BaseDate, BaseModal},
+    components: {BaseSelect, BaseInput, BaseModal},
     props: {
         aberta: Boolean
     },

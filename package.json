@@ -24,6 +24,7 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@vuelidate/core": "^2.0.0-alpha.40",
         "@vuelidate/validators": "^2.0.0-alpha.28",
+        "moment": "^2.29.2",
         "text-mask-addons": "^3.8.0",
         "v-calendar": "^3.0.0-alpha.8",
         "v-mask": "^2.3.0",

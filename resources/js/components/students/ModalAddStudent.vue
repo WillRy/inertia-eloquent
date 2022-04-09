@@ -29,7 +29,7 @@
 
                 <BaseDate
                     label="Data de Nascimento"
-                    v-model="form.date_birth"
+                    v-model:formatado="form.date_birth"
                     :class="{error: form.errors.date_birth}"
                     :error="form.errors.date_birth"
                 >
@@ -134,7 +134,6 @@ export default {
                     console.log(data);
                     return {
                         ...data,
-                        date_birth: data.date_birth ? data.date_birth.toISOString().split('T')[0] : '',
                         gender: data.gender ? data.gender.id : ''
                     }
                 })

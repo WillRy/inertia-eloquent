@@ -49,7 +49,7 @@
 
                 <BaseDate
                     label="Data de Início"
-                    v-model="form.dt_start"
+                    v-model:formatado="form.dt_start"
                 >
                     <template v-slot:error>
                         <div v-if="v$.form.dt_start.$error">
@@ -143,7 +143,6 @@ export default {
 
                 let dados = {
                     ...this.form,
-                    dt_start: this.form.dt_start ? this.form.dt_start.toISOString().split('T')[0] : '',
                     student_id: this.form.aluno ? this.form.aluno.id : '',
                     plan_id: this.form.plano ? this.form.plano.id : '',
                 }

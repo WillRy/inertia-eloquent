@@ -156,7 +156,6 @@ export default {
                     console.log(data);
                     return {
                         ...data,
-                        date_birth: data.date_birth ? data.date_birth.toISOString().split('T')[0] : '',
                         gender: data.gender ? data.gender.id : ''
                     }
                 })
