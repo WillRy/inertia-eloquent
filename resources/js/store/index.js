@@ -10,7 +10,10 @@ export default createStore({
         planos_id_edicao: null,
         planos_id_exclusao: null,
         planos_filtro_pesquisa: '',
-        planos_filtro_pagina: 1
+        planos_filtro_pagina: 1,
+        matriculas_reload: {},
+        matriculas_id_edicao: null,
+        matriculas_id_exclusao: null,
     },
     actions: {
         returnPlanos(context){
@@ -49,6 +52,15 @@ export default createStore({
         },
         SET_PLANOS_FILTRO_PAGINA(state, pagina) {
             state.planos_filtro_pagina = pagina;
-        }
+        },
+        SET_MATRICULAS_RELOAD(state, obj) {
+            state.matriculas_reload = obj;
+        },
+        SET_MATRICULAS_ID_EDICAO(state, id) {
+            state.matriculas_id_edicao = id;
+        },
+        SET_MATRICULAS_ID_EXCLUSAO(state, id) {
+            state.matriculas_id_exclusao = id;
+        },
     }
 })

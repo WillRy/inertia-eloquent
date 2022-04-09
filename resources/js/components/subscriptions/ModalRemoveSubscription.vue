@@ -1,14 +1,14 @@
 <template>
     <BaseModal
-        :aberta="plano_id"
+        :aberta="matricula_id"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
         <template #title>
-            <h3>Edição de Plano</h3>
+            <h3>Exclusão de Matrícula</h3>
         </template>
         <template #body>
-            <p v-if="plano && !loadingDados" class="modal-description">Deseja excluir o plano {{plano.name}}?</p>
+            <p v-if="subscription && !loadingDados" class="modal-description">Deseja excluir a matrícula do aluno {{ subscription.student.name }}?</p>
             <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
         </template>
         <template #footer>
@@ -27,69 +27,66 @@
 import BaseModal from "../modal/BaseModal";
 import BaseInput from "../forms/BaseInput";
 import BaseDate from "../forms/BaseDate";
-import useVuelidate from '@vuelidate/core'
 import axios from 'axios';
 import {mapMutations, mapState} from 'vuex';
 import BaseSelect from "../forms/BaseSelect";
 
 export default {
-    name: "Plan",
+    name: "ModalRemoveSubscription",
     components: {BaseSelect, BaseInput, BaseDate, BaseModal},
-    props: {
-        aberta: Boolean
-    },
-    setup: () => ({v$: useVuelidate()}),
-    data(){
+    data() {
         return {
-            plano: null,
+            subscription: null,
             loading: false,
             loadingDados: false
         }
     },
-
-    computed:{
+    computed: {
         ...mapState({
-            'plano_id': 'planos_id_exclusao'
+            'matricula_id': 'matriculas_id_exclusao'
         })
     },
     methods: {
         ...mapMutations([
-            'SET_PLANOS_RELOAD',
-            'SET_PLANOS_ID_EXCLUSAO'
+            'SET_MATRICULAS_ID_EXCLUSAO',
+            'SET_MATRICULAS_RELOAD'
         ]),
-        carregarFormulario(){
+        carregarFormulario() {
             this.loadingDados = true;
-            axios.get(`/dashboard/plans/${this.plano_id}`).then((response)=>{
-                this.plano = response.data.data;
-            }).catch(()=>{
+            axios.get(`/dashboard/subscriptions/${this.matricula_id}`).then((response) => {
+                this.subscription = response.data.data;
+            }).catch(() => {
                 this.$toast.open({
                     type: 'error',
-                    message: 'Não foi possível exibir o plano!'
+                    message: 'Não foi possível exibir a matrícula!'
                 });
                 this.fecharModal();
-            }).finally(()=>{
+            }).finally(() => {
                 this.loadingDados = false;
             })
         },
         fecharModal() {
-            this.SET_PLANOS_ID_EXCLUSAO(null);
+            this.SET_MATRICULAS_ID_EXCLUSAO(null);
             this.$emit("onClose");
         },
         async submit() {
             this.loading = true;
-            axios.delete(`/dashboard/plans/${this.plano_id}`).then((response)=>{
+            axios.delete(`/dashboard/subscriptions/${this.matricula_id}`).then((response) => {
                 this.fecharModal();
                 this.$toast.open({
                     type: 'success',
-                    message: 'Plano excluido com sucesso'
+                    message: 'Matrícula excluido com sucesso'
                 });
                 //envia sinal de reload para outros componentes
-                this.SET_PLANOS_RELOAD(response.data);
-            }).catch((error)=>{
-                this.$laravelError(error, 'Não foi possível excluir o plano')
-            }).finally(()=>{
+                this.SET_MATRICULAS_RELOAD({
+                    ...this.subscription,
+                    tipo: 'exclusao'
+                });
+            }).catch((error) => {
+                this.$laravelError(error, 'Não foi possível excluir a matrícula')
+            }).finally(() => {
                 this.loading = false;
-            })
+            });
         }
     }
 }

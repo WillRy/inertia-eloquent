@@ -64,12 +64,13 @@ import BaseModal from "../modal/BaseModal";
 import BaseInput from "../forms/BaseInput";
 import BaseDate from "../forms/BaseDate";
 import useVuelidate from '@vuelidate/core'
-import {required, email} from '@vuelidate/validators'
+import {required} from '@vuelidate/validators'
 import axios from 'axios';
 import {mapMutations} from 'vuex';
 import BaseSelect from "../forms/BaseSelect";
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+
 const currencyMask = createNumberMask({
     prefix: '',
     allowDecimal: true,

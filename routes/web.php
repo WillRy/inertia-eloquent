@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,8 @@ Route::group(["middleware" => "auth:web"], function () {
         Route::group(["prefix" => "students"], function () {
             Route::get("/", [\App\Http\Controllers\StudentController::class, 'index'])->name('dashboard.students');
 
+            Route::get("/list", [\App\Http\Controllers\StudentController::class, 'list'])->name('dashboard.list');
+
             Route::get("/{id}", [\App\Http\Controllers\StudentController::class, 'show'])->name('students.show');
 
             Route::post("/", [\App\Http\Controllers\StudentController::class, 'store'])->name('students.store');
@@ -57,6 +60,20 @@ Route::group(["middleware" => "auth:web"], function () {
             Route::put("/{id}", [\App\Http\Controllers\PlanController::class, 'update'])->name('plans.update');
 
             Route::delete("/{id}", [\App\Http\Controllers\PlanController::class, 'destroy'])->name('plans.destroy');
+        });
+
+        Route::group(["prefix" => "subscriptions"], function () {
+            Route::get("/", [SubscriptionController::class, 'index'])->name('subscriptions.index');
+
+            Route::get("/list", [SubscriptionController::class, 'list'])->name('subscriptions.list');
+
+            Route::get("/{subscription}", [SubscriptionController::class, 'show'])->name('subscriptions.show');
+
+            Route::post("/", [SubscriptionController::class, 'store'])->name('subscriptions.store');
+
+            Route::put("/{subscription}", [SubscriptionController::class, 'update'])->name('subscriptions.update');
+
+            Route::delete("/{subscription}", [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
         });
 
     });

@@ -72,5 +72,14 @@ class Student extends Model
         return $totais;
     }
 
+    public function search($filters = [])
+    {
+        return $this::tenant()
+            ->when(!empty($filters["search"]), function ($query) use ($filters) {
+                $query->where("name", 'like', "%{$filters['search']}%");
+            })
+            ->paginate(10);
+    }
+
 
 }

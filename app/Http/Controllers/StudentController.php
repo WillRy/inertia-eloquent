@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Requests\StudentStoreUpdateRequest;
+use App\Models\Plan;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,6 +27,13 @@ class StudentController extends Controller
             "filters" => $filters,
             "page" => $request->input("page", 1)
         ]);
+    }
+
+    public function list(Request $request)
+    {
+        $filters = ["search" => $request->input("search")];
+        $students = (new Student())->searchStudents($filters);
+        return response()->json($students);
     }
 
     public function store(StudentStoreUpdateRequest $request)

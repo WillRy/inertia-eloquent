@@ -74,14 +74,12 @@
 import Dashboard from "../../Layouts/Dashboard";
 import PageHeader from "../../components/dashboard/PageHeader";
 import BaseInput from "../../components/forms/BaseInput";
-import {mapMutations, mapState, mapActions} from 'vuex'
+import {mapActions, mapMutations, mapState} from 'vuex'
 import PaginacaoSemRouter from "../../components/paginacao/PaginacaoSemRouter";
 import BaseSelect from "../../components/forms/BaseSelect";
 import ModalAddPlan from '../../components/plans/ModalAddPlan';
 import ModalEditPlan from '../../components/plans/ModalEditPlan';
 import ModalRemovePlan from '../../components/plans/ModalRemovePlan';
-
-import axios from "axios";
 
 export default {
     name: "Index",

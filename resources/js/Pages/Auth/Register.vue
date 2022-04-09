@@ -55,7 +55,6 @@
 <script>
 import Publico from '../../Layouts/Publico'
 import BaseInput from "../../components/forms/BaseInput";
-import Loader from "../../components/Loader";
 import {Link} from "@inertiajs/inertia-vue3";
 
 export default {

@@ -25,6 +25,7 @@
 
 <script>
 import VueMultiselect from 'vue-multiselect'
+
 export default {
     name: "BaseSelect",
     inheritAttrs: false,

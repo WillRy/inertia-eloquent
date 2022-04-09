@@ -6,7 +6,7 @@ use App\Rules\UniqueTenant;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
-class PlanStoreUpdateRequest extends FormRequest
+class StoreUpdateSubscriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,12 @@ class PlanStoreUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = Route::current()->parameter("id") ?? Route::current()->parameter("plan");
+        $id = Route::current()->parameter("id") ?? Route::current()->parameter("subscription");
 
         return [
-            "name" => ["required", "min:3", "max:255", new UniqueTenant("students", "id", $id, "Nome")],
-            "price" => ["required"],
-            "duration" => "required|integer"
+            "student_id" => "required|exists:students,id",
+            "plan_id" => "required|exists:plans,id",
+            "dt_start" => ["required"],
         ];
     }
 }

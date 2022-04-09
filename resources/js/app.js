@@ -1,9 +1,9 @@
-import { createApp, h } from 'vue'
-import { createInertiaApp } from '@inertiajs/inertia-vue3'
+import {createApp, h} from 'vue'
+import {createInertiaApp} from '@inertiajs/inertia-vue3'
 import VueToast from "vue-toast-notification"
 import Loader from "./components/Loader";
-import { DatePicker } from 'v-calendar';
-import { VueMaskDirective } from 'v-mask';
+import {DatePicker} from 'v-calendar';
+import {VueMaskDirective} from 'v-mask';
 
 import store from './store/index'
 
@@ -16,6 +16,11 @@ let LaravelError = {
                 let erro = Object.keys(response.data.errors)[0];
                 app.config.globalProperties.$toast.open({
                     message: response.data.errors[erro][0],
+                    type: 'error'
+                });
+            } else if(response && response.data.error){
+                app.config.globalProperties.$toast.open({
+                    message: response.data.error,
                     type: 'error'
                 });
             } else {
