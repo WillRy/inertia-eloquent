@@ -72,14 +72,12 @@ a {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 13px;
+    padding: 12px;
     border-radius: 4px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    min-height: 50px;
+    min-height: 42px;
 }
 
 .btn:disabled {
@@ -205,4 +203,8 @@ table tr+tr {
     grid-template-columns: repeat(auto-fit, minmax(340px, 32%));
     gap: 22px;
     justify-content: center;
+}
+
+.errorMessage {
+    color: red;
 }

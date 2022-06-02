@@ -1,33 +1,34 @@
 <template>
-    <div class="form-group" :style="{'margin-bottom': mb, width: width}">
+    <div :style="{'margin-bottom': mb, width: width}" class="form-group">
         <label v-if="label" :for="$attrs.id">{{ label }}</label>
         <DatePicker
             v-model="data"
-            mode="date"
-            is24hr
             v-bind="attrs"
+            is24hr
+            mode="date"
         >
             <template v-slot="{ inputValue, inputEvents }">
                 <input
-                    :value="inputValue"
-                    v-on="inputEvents"
                     v-if="!disabled"
+                    v-on="inputEvents"
+                    :value="inputValue"
                 />
                 <input
+                    v-else
                     :value="formatado"
                     disabled
-                    v-else
                 />
             </template>
         </DatePicker>
-        <div class="errorMessage" v-if="error">
+        <div v-if="error || $slots.error" class="errorMessage">
             <div>{{ error }}</div>
+            <slot name="error"></slot>
         </div>
     </div>
 </template>
 
 <script>
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 export default {
     name: "BaseDate",
@@ -53,6 +54,9 @@ export default {
         },
         formatado: {
             type: [String, Date]
+        },
+        timezone: {
+            default: 'America/Sao_Paulo'
         }
     },
     computed: {
@@ -64,8 +68,8 @@ export default {
         data: {
             set(valor) {
                 if (valor) {
-                    let objeto = moment(valor);
-                    let string = moment(valor).format("Y-MM-DD");
+                    let objeto = moment(valor).tz(this.timezone);
+                    let string = moment(valor).tz(this.timezone).format("Y-MM-DD");
                     this.$emit('update:modelValue', objeto);
                     this.$emit('update:formatado', string);
                 }
@@ -73,7 +77,7 @@ export default {
             },
             get() {
                 let valor = this.modelValue || this.formatado;
-                return moment(valor).toDate();
+                return moment(valor).tz(this.timezone).toDate();
             }
         },
     },
@@ -95,25 +99,23 @@ export default {
 </script>
 <style scoped>
 .form-group label {
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 14px;
-    color: #444444;
+    color: var(--cor-label);
     margin-bottom: 8px;
-    text-transform: uppercase;
     display: block;
+    text-transform: capitalize;
 }
 
 .form-group input {
     background: #FFFFFF;
     border: 1px solid var(--cor-borda-principal);
     border-radius: var(--radius-principal);
-    padding: 13px 15px;
+    padding: 10px;
     display: block;
     width: 100%;
-    height: 100%;
-    color: var(--cor-texto-secundario);
+    height: 42px;
+    color: #444444;
 }
 
 .form-group input::placeholder {
@@ -121,7 +123,12 @@ export default {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-    color: var(--cor-texto-terciario);
+    color: var(--cor-placeholder);
 }
 
+
+/deep/ .errorMessage > div {
+    margin: 3px 0;
+    color: var(--cor-input-error);
+}
 </style>

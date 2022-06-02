@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger("student_id");
-            $table->foreign("student_id")->references("id")->on("students");
+            $table->foreign("student_id")->references("id")->on("students")->onDelete("CASCADE");
 
             $table->unsignedBigInteger("plan_id");
-            $table->foreign("plan_id")->references("id")->on("plans");
+            $table->foreign("plan_id")->references("id")->on("plans")->onDelete("CASCADE");
 
             $table->date("dt_start");
             $table->date("dt_end");

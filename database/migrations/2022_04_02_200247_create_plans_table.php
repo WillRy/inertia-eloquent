@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer("duration");
 
             $table->unsignedBigInteger("tenant_id");
-            $table->foreign("tenant_id")->references("id")->on("tenants");
+            $table->foreign("tenant_id")->references("id")->on("tenants")->onDelete("CASCADE");
 
             $table->timestamps();
         });

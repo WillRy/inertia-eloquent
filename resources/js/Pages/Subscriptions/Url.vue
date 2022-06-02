@@ -10,7 +10,7 @@
                 </button>
 
                 <BaseSelect
-                    placeholder="Digite o plano"
+                    placeholder="Pesquise o plano"
                     v-model="planFilter"
                     track-by="id"
                     text-by="name"
@@ -21,6 +21,7 @@
                     @change="pesquisar"
                     mb="0px"
                     :clear="true"
+                    oOptions="Pesquise o plano"
                 >
                 </BaseSelect>
 

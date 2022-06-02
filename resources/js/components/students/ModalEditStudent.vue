@@ -30,7 +30,7 @@
 
                 <BaseDate
                     label="Data de Nascimento"
-                    v-model="form.date_birth"
+                    v-model:formatado="form.date_birth"
                     :class="{error: form.errors.date_birth}"
                     :error="form.errors.date_birth"
                 >

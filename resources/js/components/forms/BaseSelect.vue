@@ -1,26 +1,26 @@
 <template>
-    <div class="form-group" :style="{'margin-bottom': mb, width: width}">
+    <div :style="{'margin-bottom': mb, width: width}" class="form-group">
         <label v-if="label" :for="$attrs.id">{{ label }}</label>
         <VueMultiselect
-            @update:model-value="updateValue"
+            v-bind="attrs"
+            :allow-empty="empty"
+            :deselectLabel="remover ? 'Remover' : ''"
+            :label="textBy"
             :model-value="modelValue"
-            :track-by="trackBy"
             :options="options"
             :searchable="search"
-            :allow-empty="empty"
-            :label="textBy"
-            v-bind="attrs"
-            selectLabel=""
-            selectGroupLabel=""
-            selectedLabel=""
-            deselectLabel=""
+            :track-by="trackBy"
             deselectGroupLabel=""
+            selectGroupLabel=""
+            selectLabel=""
+            selectedLabel=""
+            @update:model-value="updateValue"
         >
-            <template #noOptions v-if="noOptions">
+            <template v-if="noOptions" #noOptions>
                 {{ noOptions }}
             </template>
         </VueMultiselect>
-        <div class="errorMessage" v-if="error || $slots.error">
+        <div v-if="error || $slots.error" class="errorMessage">
             <div>{{ error }}</div>
             <slot name="error"></slot>
         </div>
@@ -69,11 +69,15 @@ export default {
         },
         empty: {
             type: Boolean,
-            default: false
+            default: true
         },
         error: {
             type: String,
             default: null
+        },
+        remover: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -94,20 +98,17 @@ export default {
 </script>
 <style scoped>
 
-.form-group label {
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: bold;
+label {
+    font-weight: 700;
     font-size: 14px;
-    color: #444444;
+    color: var(--cor-label);
     margin-bottom: 8px;
-    text-transform: uppercase;
     display: block;
 }
 
 /deep/ .errorMessage > div {
     margin: 3px 0;
-    color: red;
+    color: var(--cor-input-error);
 }
 
 </style>

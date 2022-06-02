@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum("gender", ["m","f","o"]);
 
             $table->unsignedBigInteger("tenant_id");
-            $table->foreign("tenant_id")->references("id")->on("tenants");
+            $table->foreign("tenant_id")->references("id")->on("tenants")->onDelete("CASCADE");
 
 
             $table->timestamps();

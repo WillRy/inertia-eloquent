@@ -1,11 +1,17 @@
 <template>
-    <div class="form-group" :style="{'margin-bottom': mb, width: width}">
+    <div :class="{'form-group-has-icon': $slots.icon}" :style="{'margin-bottom': mb, width: width}" class="form-group">
         <label v-if="label" :for="$attrs.id">{{ label }}</label>
-        <input type="text" :value="modelValue" @input="updateValue" v-bind="attrs">
-        <div class="errorMessage" v-if="error || $slots.error">
+        <div class="form-group-container">
+            <div v-if="$slots.icon" class="form-group-icon">
+                <slot name="icon"></slot>
+            </div>
+            <input v-bind="attrs" :value="modelValue"  @input="updateValue">
+        </div>
+        <div v-if="error || $slots.error" class="errorMessage">
             <div>{{ error }}</div>
             <slot name="error"></slot>
         </div>
+
     </div>
 </template>
 
@@ -53,25 +59,55 @@ export default {
 label {
     font-weight: 700;
     font-size: 14px;
-    color: #444444;
-    text-transform: uppercase;
+    color: var(--cor-label);
     margin-bottom: 8px;
     display: block;
+    text-transform: capitalize;
+}
+
+.form-group-container {
+    position: relative;
+}
+
+.form-group-icon {
+    display: none;
 }
 
 input {
     background: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    box-sizing: border-box;
-    border-radius: 4px;
+    border: 1px solid var(--cor-borda-principal);
+    border-radius: var(--radius-principal);
     width: 100%;
-    padding: 13px;
-    min-height: 50px;
+    font-size: 16px;
+    padding: 10px;
+    min-height: 42px;
+    color: #444444;
+    font-weight: normal;
 }
+
+.form-group-has-icon input {
+    padding-left: 45px !important;
+}
+
+.form-group-has-icon .form-group-icon {
+    display: block;
+    /*centraliza vertical*/
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
+
+input::placeholder {
+    font-size: 16px;
+    color: var(--cor-placeholder);
+}
+
 
 /deep/ .errorMessage > div {
     margin: 3px 0;
-    color: red;
+    color: var(--cor-input-error);
 }
 
 </style>

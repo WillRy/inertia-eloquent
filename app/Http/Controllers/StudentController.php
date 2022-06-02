@@ -90,7 +90,7 @@ class StudentController extends Controller
 
             return redirect()->back()->with([
                 "data" => $student,
-                "success" => "Aluno criado com sucesso!"
+                "success" => "Aluno editado com sucesso!"
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with([
@@ -113,14 +113,10 @@ class StudentController extends Controller
             $student->delete();
 
 
-//            return response()->json([], 204);
             return redirect()->back()->with([
                 "success" => "Aluno excluido com sucesso"
             ]);
         } catch (\Exception $e) {
-//            return response()->json([
-//                "error" => $e->getMessage()
-//            ], 500);
             return redirect()->back()
                 ->with(["error" => $e->getMessage()])
                 ->withErrors([]);

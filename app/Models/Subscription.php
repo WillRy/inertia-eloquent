@@ -76,4 +76,14 @@ class Subscription extends Model
             ->orderBy("id","DESC")
             ->paginate(10);
     }
+
+    public function subscriptionExistsByPlan($plan_id)
+    {
+        return Subscription::query()
+            ->tenant()
+            ->whereHas('plan', function ($query) use ($plan_id) {
+                $query->where("id",'=', $plan_id);
+            })
+            ->exists();
+    }
 }

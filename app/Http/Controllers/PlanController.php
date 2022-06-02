@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PlanStoreUpdateRequest;
 use App\Models\Plan;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,16 +40,16 @@ class PlanController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $student = Plan::tenant()->where("id", "=", $id)->first();
+            $plan = Plan::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if(empty($plan)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);
             }
 
             return response()->json([
-                "data" => $student
+                "data" => $plan
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -60,20 +61,20 @@ class PlanController extends Controller
     public function update(PlanStoreUpdateRequest $request, $id)
     {
         try {
-            $student = Plan::tenant()->where("id", "=", $id)->first();
+            $plan = Plan::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if(empty($plan)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);
             }
 
-            $student->fill($request->all());
-            $student->save();
+            $plan->fill($request->all());
+            $plan->save();
 
 
             return response()->json([
-                "data" => $student
+                "data" => $plan
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -85,15 +86,21 @@ class PlanController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $student = Plan::tenant()->where("id", "=", $id)->first();
+            $plan = Plan::tenant()->where("id", "=", $id)->first();
 
-            if(empty($student)) {
+            if(empty($plan)) {
                 return response()->json([
                     "error" => "Not found"
                 ], 404);
             }
 
-            $student->delete();
+            if ((new Subscription())->subscriptionExistsByPlan($id)) {
+                return response()->json([
+                    "error" => "Plano usado em alguma matrícula"
+                ], 422);
+            }
+
+            $plan->delete();
 
 
             return response()->json([], 204);

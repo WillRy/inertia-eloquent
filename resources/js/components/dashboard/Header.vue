@@ -11,24 +11,24 @@
             <ul>
                 <li>
                     <Link href="/dashboard/students" :class="{active: $page.url.endsWith('/dashboard/students')}">
-                        alunos
+                        alunos (Padrão InertiaJS)
                     </Link>
                 </li>
                 <li>
                     <Link href="/dashboard/plans" :class="{active: $page.url.endsWith('/dashboard/plans')}">
-                        planos
+                        planos (Padrão VueJS)
                     </Link>
                 </li>
                 <li>
                     <Link href="/dashboard/subscriptions"
                           :class="{active: $page.url.endsWith('/dashboard/subscriptions')}">
-                        matriculas
+                        matriculas (Padrão Vue sem router)
                     </Link>
                 </li>
                 <li>
                     <Link href="/dashboard/subscriptions/url"
                           :class="{active: $page.url.endsWith('/dashboard/subscriptions/url')}">
-                        matriculas (filtro url)
+                        matriculas (Padrão Vue COM router)
                     </Link>
                 </li>
             </ul>
