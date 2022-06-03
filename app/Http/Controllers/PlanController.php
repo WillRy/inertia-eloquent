@@ -17,7 +17,11 @@ class PlanController extends Controller
 
     public function list(Request $request)
     {
-        $filters = ["search" => $request->input("search")];
+        $filters = [
+            "search" => $request->input("search"),
+            "sortName" => $request->input("sortName", "id"),
+            "sortOrder" => $request->input("sortOrder", "asc")
+        ];
         $plans = (new Plan())->searchPlans($filters);
         return response()->json($plans);
     }

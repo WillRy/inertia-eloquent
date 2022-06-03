@@ -97,7 +97,6 @@ export default {
     /* width: 650px; */
     margin: 120px 0;
     position: relative;
-    overflow-y: auto;
     max-width: 650px;
     width: 65vw;
 }

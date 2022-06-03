@@ -22,10 +22,30 @@
             <table :class="{loading: loading}">
                 <thead>
                 <tr>
-                    <th style="width: 500px">Nome</th>
-                    <th style="width: 200px">Preço</th>
-                    <th style="width: 200px">Periodo (em mêses)</th>
-                    <th style="width: 200px">Ações</th>
+                    <HeadSort
+                        style="width: 500px"
+                        @onSort="sortBy('name')"
+                        nome="name"
+                        texto="Nome"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        style="width: 200px"
+                        @onSort="sortBy('price')"
+                        nome="price"
+                        texto="Preço"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        style="width: 200px"
+                        @onSort="sortBy('duration')"
+                        nome="duration"
+                        texto="Periodo (em mêses)"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
                 </tr>
                 </thead>
                 <tbody v-if="plans && plans.data">
@@ -79,10 +99,13 @@ import BaseSelect from "../../components/forms/BaseSelect";
 import ModalAddPlan from '../../components/plans/ModalAddPlan';
 import ModalEditPlan from '../../components/plans/ModalEditPlan';
 import ModalRemovePlan from '../../components/plans/ModalRemovePlan';
+import axios from "axios";
+import HeadSort from "../../components/datatables/HeadSort";
 
 export default {
     name: "Index",
     components: {
+        HeadSort,
         BaseSelect,
         PaginacaoSemRouter,
         BaseInput,
@@ -96,7 +119,12 @@ export default {
         return {
             abrirModalCadastro: false,
             loading: false,
-            plans: null
+            plans: null,
+            sortName: "id",
+            sortOrder: "asc",
+            search: "",
+            page: 1
+
         }
     },
     computed: {
@@ -105,22 +133,6 @@ export default {
             'planos_filtro_pesquisa': 'planos_filtro_pesquisa',
             'planos_filtro_pagina': 'planos_filtro_pagina',
         }),
-        search: {
-            get() {
-                return this.planos_filtro_pesquisa;
-            },
-            set(value) {
-                return this.SET_PLANOS_FILTRO_PESQUISA(value);
-            }
-        },
-        page: {
-            get() {
-                return this.planos_filtro_pagina;
-            },
-            set(value) {
-                return this.SET_PLANOS_FILTRO_PAGINA(value);
-            }
-        }
     },
     watch: {
         planos_reload() {
@@ -137,6 +149,16 @@ export default {
         ...mapActions([
             'returnPlanos'
         ]),
+        sortBy(campo) {
+            this.sortName = campo;
+            if (this.sortName !== campo) {
+                this.sortOrder = "asc";
+            } else {
+                this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+            }
+            this.page = 1;
+            this.carregarDados();
+        },
         abrirEdicao(id) {
             this.SET_PLANOS_ID_EDICAO(id);
         },
@@ -152,13 +174,21 @@ export default {
         },
         carregarDados() {
             this.loading = true;
-            this.returnPlanos().then((response) => {
+            /** retorna promise**/
+            return axios.get("/dashboard/plans/list", {
+                params: {
+                    ...(this.search ? {search: this.search || ''} : {}),
+                    ...(this.page ? {page: this.page || 1} : {}),
+                    ...(this.sortName ? {sortName: this.sortName || 'id'} : {}),
+                    ...(this.sortOrder ? {sortOrder: this.sortOrder || 'asc'} : {}),
+                }
+            }).then((response) => {
                 this.plans = response.data
             }).catch(() => {
 
             }).finally(() => {
                 this.loading = false;
-            })
+            });
 
         }
     },

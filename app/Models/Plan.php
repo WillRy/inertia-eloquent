@@ -49,6 +49,7 @@ class Plan extends Model
             ->when(!empty($filters["search"]), function ($query) use ($filters) {
                 $query->where("name", 'like', "%{$filters['search']}%")->orWhere("price", 'like', "%{$filters['search']}%");
             })
+            ->orderBy($filters["sortName"], $filters["sortOrder"])
             ->paginate(10);
     }
 
