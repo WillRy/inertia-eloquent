@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
 
 Route::group(["middleware" => "guest"], function () {
     Route::get("/register", [\App\Http\Controllers\Auth\AuthController::class, 'register']);
