@@ -134,6 +134,8 @@ export default {
                         message: 'Matrícula editada com sucesso'
                     });
                     //envia sinal de reload para outros componentes
+                    //nao uso this.$emit pois as vezes a modal nao está no mesmo nivel
+                    //no DOM, que os outros componentes
                     this.SET_MATRICULAS_RELOAD({
                         ...response.data.data,
                         tipo: 'edicao'

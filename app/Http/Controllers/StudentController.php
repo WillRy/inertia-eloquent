@@ -16,7 +16,9 @@ class StudentController extends Controller
 
         $filters = [
             "gender" => $request->input("gender"),
-            "search" => $request->input("search")
+            "search" => $request->input("search"),
+            "sortName" => $request->input("sortName", "id"),
+            "sortOrder" => $request->input("sortOrder", "asc")
         ];
 
 //        $students = (new Student())->searchStudents($filters);

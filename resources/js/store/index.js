@@ -9,24 +9,12 @@ export default createStore({
         planos_reload: {},
         planos_id_edicao: null,
         planos_id_exclusao: null,
-        planos_filtro_pesquisa: '',
-        planos_filtro_pagina: 1,
         matriculas_reload: {},
         matriculas_id_edicao: null,
         matriculas_id_exclusao: null,
     },
     actions: {
-        returnPlanos(context) {
-            let search = context.state.planos_filtro_pesquisa || '';
-            let page = context.state.planos_filtro_pagina || 1;
-            /** retorna promise**/
-            return axios.get("/dashboard/plans/list", {
-                params: {
-                    ...(search ? {search: search} : {}),
-                    ...(page ? {page: page} : {}),
-                }
-            });
-        }
+
     },
     mutations: {
         SET_ALUNOS_RELOAD(state, obj) {

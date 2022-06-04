@@ -54,6 +54,7 @@ class Student extends Model
             ->when(!empty($filters["gender"]), function ($query) use ($filters) {
                 $query->where("gender", '=', $filters['gender']);
             })
+            ->orderBy($filters["sortName"], $filters["sortOrder"])
             ->paginate(10);
     }
 

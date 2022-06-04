@@ -51,12 +51,48 @@
             <table :class="{loading: loading}">
                 <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Gênero</th>
-                    <th>Nascimento</th>
-                    <th>Peso</th>
-                    <th>Altura</th>
+                    <HeadSort
+                        @onSort="sortBy('name')"
+                        nome="name"
+                        texto="Nome"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        @onSort="sortBy('email')"
+                        nome="email"
+                        texto="Email"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        @onSort="sortBy('gender')"
+                        nome="gender"
+                        texto="Gênero"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        @onSort="sortBy('date_birth')"
+                        nome="date_birth"
+                        texto="Nascimento"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        @onSort="sortBy('weight')"
+                        nome="weight"
+                        texto="Peso"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
+                    <HeadSort
+                        @onSort="sortBy('height')"
+                        nome="height"
+                        texto="Altura"
+                        :order="sortOrder"
+                        :ordenando="sortName"
+                    />
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -111,10 +147,12 @@ import {mapMutations, mapState} from 'vuex'
 import PaginacaoSemRouter from "../../components/paginacao/PaginacaoSemRouter";
 import BaseSelect from "../../components/forms/BaseSelect";
 import ModalRemoveStudent from "../../components/students/ModalRemoveStudent";
+import HeadSort from "../../components/datatables/HeadSort";
 
 export default {
     name: "Index",
     components: {
+        HeadSort,
         ModalRemoveStudent,
         BaseSelect,
         PaginacaoSemRouter,
@@ -137,6 +175,8 @@ export default {
                 {name: 'Feminino', id: 'f'},
                 {name: 'Outro', id: 'o'},
             ],
+            sortName: "id",
+            sortOrder: "asc",
         }
     },
     computed: {
@@ -157,6 +197,15 @@ export default {
             'SET_ALUNOS_ID_EDICAO',
             'SET_ALUNOS_ID_EXCLUSAO',
         ]),
+        sortBy(campo) {
+            this.sortName = campo;
+            if (this.sortName !== campo) {
+                this.sortOrder = "asc";
+            } else {
+                this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+            }
+            this.reload(1);
+        },
         abrirEdicao(id) {
             this.SET_ALUNOS_ID_EDICAO(id);
         },
@@ -174,8 +223,9 @@ export default {
                 page: page || this.page,
                 ...(this.searchField ? {search: this.searchField} : {}),
                 ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
+                ...(this.sortName ? {sortName: this.sortName || 'id'} : {}),
+                ...(this.sortOrder ? {sortOrder: this.sortOrder || 'asc'} : {}),
             }, {
-                only: ['students', 'filters', 'total'],
                 preserveState: true,
                 onSuccess: () => {
                     this.loading = false

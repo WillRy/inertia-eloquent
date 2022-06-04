@@ -126,6 +126,8 @@ export default {
                         message: 'Plano cadastrado com sucesso'
                     });
                     //envia sinal de reload para outros componentes
+                    //nao uso this.$emit pois as vezes a modal nao está no mesmo nivel
+                    //no DOM, que os outros componentes
                     this.SET_PLANOS_RELOAD(response.data);
                 }).catch((error) => {
                     this.$laravelError(error, 'Não foi possível cadastrar o plano')
