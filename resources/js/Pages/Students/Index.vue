@@ -176,8 +176,8 @@ export default {
                 {name: 'Feminino', id: 'f'},
                 {name: 'Outro', id: 'o'},
             ],
-            sortName: "id",
-            sortOrder: "asc",
+            sortName: this.filters.sortName,
+            sortOrder: this.filters.sortOrder,
         }
     },
     computed: {
