@@ -8,13 +8,13 @@
 export default {
     name: "Publico",
     watch: {
-        "$page.props.success": {
+        "$page.props.flash.success": {
             deep: true,
             handler(valor) {
                 this.exibirSuccess(valor);
             }
         },
-        "$page.props.error": {
+        "$page.props.flash.error": {
             deep: true,
             handler(valor) {
                 if (!valor) {
@@ -51,11 +51,11 @@ export default {
         },
     },
     created() {
-        if (this.$page.props.success) {
-            this.exibirSuccess(this.$page.props.success);
+        if (this.$page.props.flash.success) {
+            this.exibirSuccess(this.$page.props.flash.success);
         }
-        if (this.$page.props.error) {
-            this.exibirError(this.$page.props.error);
+        if (this.$page.props.flash.error) {
+            this.exibirError(this.$page.props.flash.error);
         }
     }
 }

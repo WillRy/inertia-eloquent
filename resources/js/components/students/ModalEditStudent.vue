@@ -95,6 +95,7 @@ import {useForm} from "@inertiajs/inertia-vue3";
 export default {
     name: "ModalEditStudent",
     components: {BaseSelect, BaseInput, BaseDate, BaseModal},
+    props: ['reload'],
     setup() {
         const form = useForm({
             name: '',
@@ -160,6 +161,7 @@ export default {
                     }
                 })
                 .put(`/dashboard/students/${this.aluno_id}`, {
+                    only: this.reload,
                     onSuccess: () => {
                         this.fecharModal();
                         this.loading = false;

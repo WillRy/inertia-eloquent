@@ -31,6 +31,7 @@ import {mapMutations, mapState} from 'vuex';
 export default {
     name: "ModalRemoveStudent",
     components: {BaseModal},
+    props: ['reload'],
     data() {
         return {
             student: null,
@@ -70,6 +71,7 @@ export default {
         async submit() {
             this.loading = true;
             this.$inertia.delete(`/dashboard/students/${this.aluno_id}`, {
+                only: this.reload,
                 onSuccess: () => {
                     this.fecharModal();
                 },

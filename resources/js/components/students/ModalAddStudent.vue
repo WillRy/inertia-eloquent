@@ -92,7 +92,8 @@ export default {
     components: {BaseSelect, BaseInput, BaseDate, BaseModal},
     props: {
         errors: Object,
-        aberta: Boolean
+        aberta: Boolean,
+        reload: Array
     },
     setup() {
         const form = useForm({
@@ -138,6 +139,7 @@ export default {
                     }
                 })
                 .post("/dashboard/students", {
+                    only: this.reload,
                     onSuccess: () => {
                         this.fecharModal();
                         this.loading = false;
