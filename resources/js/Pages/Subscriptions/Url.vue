@@ -118,6 +118,9 @@ export default {
         }
     },
     watch: {
+        planURL() {
+          this.carregarDados();
+        },
         matriculas_reload(payload) {
             if (payload && payload.tipo === "exclusao") {
                 let index = this.subscriptions.data.findIndex((item) => item.id === payload.id);
@@ -149,7 +152,7 @@ export default {
                 ...(this.search ? {search: this.search} : {}),
                 ...(this.planFilter && this.planFilter.id ? {plan: this.planFilter.id} : {}),
             }, {
-                // preserveState: true
+                preserveState: true
             })
         },
         aumentarPagina: debounce(function () {
@@ -202,6 +205,13 @@ export default {
     created() {
         this.planFilter = this.planURL;
         this.search = this.searchURL;
+
+        /**
+         * carrega os dados via AJAX ao invés do inertiajs
+         *
+         * Depois monitora a mudança de URL com "preserveState" e o "watch" para monitorar
+         * filtro da URL
+         * */
         this.carregarDados();
 
         window.addEventListener("scroll", this.aumentarPagina);

@@ -192,6 +192,11 @@ export default {
         }
     },
     created() {
+        /**
+         * carrega os dados via AJAX ao invés do inertiajs
+         *
+         * Depois monitora a mudança de URL com "preserveState"
+         * */
         this.carregarDados();
 
         window.addEventListener("scroll", this.aumentarPagina);
