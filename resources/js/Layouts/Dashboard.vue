@@ -9,9 +9,15 @@
 
 <script>
 import Header from "../components/dashboard/Header";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
     name: "Dashboard",
+    data(){
+        return {
+            naoExibirFlashAoVoltarBrowser: false
+        }
+    },
     components: {
         Header,
     },
@@ -38,7 +44,8 @@ export default {
     },
     methods: {
         exibirSuccess(valor) {
-            if (!valor) {
+            if (!valor || this.naoExibirFlashAoVoltarBrowser) {
+                this.naoExibirFlashAoVoltarBrowser = false;
                 return;
             }
 
@@ -48,7 +55,8 @@ export default {
             });
         },
         exibirError(valor) {
-            if (!valor) {
+            if (!valor || this.naoExibirFlashAoVoltarBrowser) {
+                this.naoExibirFlashAoVoltarBrowser = false;
                 return;
             }
 
@@ -65,6 +73,27 @@ export default {
         if (this.$page.props.flash.error) {
             this.exibirError(this.$page.props.flash.error);
         }
+        /**
+         * Corrigir bug importante do inertia em relação ao history do browser. Passos para reproduzir o bug
+         *
+         * 1 - Receber uma flash message do backend
+         * 2 - Usar o botão de voltar do browser
+         * 3 - Usar o botão de avançar do browser
+         * 4 - A flash message vai aparecer novamente, sendo que não deveria
+         *
+         * O bug acontece devido a forma que o inertia.js trata o botão de voltar do browser,
+         * restaurando o history.state da página para o estado anterior
+         */
+        this.naoExibirFlashAoVoltarBrowser = false;
+
+        window.addEventListener('popstate', () => {
+            this.naoExibirFlashAoVoltarBrowser = true;
+        });
+
+        Inertia.on('before', (event) => {
+            this.naoExibirFlashAoVoltarBrowser = false;
+        });
+
     }
 }
 </script>
