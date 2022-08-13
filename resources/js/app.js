@@ -1,75 +1,34 @@
-import {createApp, h} from 'vue'
-import {createInertiaApp} from '@inertiajs/inertia-vue3'
-import VueToast from "vue-toast-notification"
-import Loader from "./components/Loader";
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import VueToast from 'vue-toast-notification';
 import {DatePicker} from 'v-calendar';
-import {VueMaskDirective} from 'v-mask';
-import outside from './click-outside';
+import FloatingVue from 'floating-vue'
 
-import store from './store/index'
+import {filters, LaravelError, EventBus, VerificaPermissao} from './plugins'
+import outside from './helpers/click-outside';
 
-let LaravelError = {
-    install: (app, options) => {
-        // inject a globally available $translate() method
-        app.config.globalProperties.$laravelError = (e, message) => {
-            let response = e.response;
-            if (response && response.status === 422 && response.data.errors) {
-                let erro = Object.keys(response.data.errors)[0];
-                app.config.globalProperties.$toast.open({
-                    message: response.data.errors[erro][0],
-                    type: 'error'
-                });
-            } else if (response && response.data.error) {
-                app.config.globalProperties.$toast.open({
-                    message: response.data.error,
-                    type: 'error'
-                });
-            } else {
-                app.config.globalProperties.$toast.open({
-                    message: message,
-                    type: 'error'
-                });
-            }
-        }
-    }
-}
+import Loader from "./components/Loader.vue";
+import BaseModal from "./components/base/modal/BaseModal.vue";
 
-let filters = {
-    install: (app, options) => {
-        app.config.globalProperties.$filters = {
-            data(value) {
-                return value ? new Date(`${value}T00:00:00`).toLocaleDateString() : '';
-            },
-            dinheiro(valor) {
-                return (new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(valor));
-            },
-            genero(valor) {
-                switch (valor) {
-                    case 'm':
-                        return 'masculino'
-                    case 'f':
-                        return 'feminino'
-                    default:
-                        return 'outro'
-                }
-            }
-        }
-    }
-}
+import store from './store';
 
-let debounce = {
-    install: (app, options) => {
-        app.config.globalProperties.$debounce = function () {
-            let timeout = null;
-            return function (fnc, delayMs) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    fnc();
-                }, delayMs || 500);
-            };
-        }()
-    }
-}
+import { InertiaProgress } from '@inertiajs/progress'
+InertiaProgress.init({
+    // The delay after which the progress bar will
+    // appear during navigation, in milliseconds.
+    delay: 250,
+
+    // The color of the progress bar.
+    color: '#f2b80c',
+
+    // Whether to include the default NProgress styles.
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown.
+    showSpinner: false
+})
+
+import { VueMaskDirective } from 'v-mask';
 
 const vMaskV2 = VueMaskDirective;
 const vMaskV3 = {
@@ -83,15 +42,18 @@ createInertiaApp({
     setup({el, App, props, plugin}) {
         createApp({render: () => h(App, props)})
             .use(plugin)
-            .use(VueToast)
-            .use(LaravelError)
-            .use(debounce)
-            .use(filters)
-            .use(outside)
             .use(store)
-            .component('Loader', Loader)
-            .component('DatePicker', DatePicker)
+            .use(VueToast)
+            .use(filters)
+            .use(LaravelError)
+            .use(FloatingVue)
+            .use(outside)
+            .use(EventBus)
+            .use(VerificaPermissao)
             .directive('mask', vMaskV3)
+            .component('DatePicker', DatePicker)
+            .component("Loader", Loader)
+            .component("BaseModal", BaseModal)
             .mount(el)
     },
 })

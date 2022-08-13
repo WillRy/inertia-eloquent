@@ -1,6 +1,6 @@
 <template>
     <BaseModal
-        :aberta="aberta"
+        :aberta="config"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
@@ -79,11 +79,11 @@
 </template>
 
 <script>
-import BaseModal from "../modal/BaseModal";
-import BaseInput from "../forms/BaseInput";
-import BaseDate from "../forms/BaseDate";
+import BaseModal from "../base/modal/BaseModal";
+import BaseInput from "../base/form/BaseInput";
+import BaseDate from "../base/form/BaseDate";
 import {mapMutations} from 'vuex';
-import BaseSelect from "../forms/BaseSelect";
+import BaseSelect from "../base/form/BaseSelect";
 import {useForm} from '@inertiajs/inertia-vue3';
 
 
@@ -108,6 +108,7 @@ export default {
     },
     data() {
         return {
+            config: null,
             loading: false,
             sexo: [
                 {name: 'Masculino', id: 'm'},
@@ -117,13 +118,11 @@ export default {
         }
     },
     methods: {
-        ...mapMutations([
-            'SET_ALUNOS_RELOAD'
-        ]),
         carregarFormulario() {
-            this.form.reset();
+
         },
         fecharModal() {
+            this.config = null;
             this.form.reset();
             this.form.clearErrors();
             this.$emit("onClose");
@@ -142,6 +141,7 @@ export default {
                     only: this.reload,
                     onSuccess: () => {
                         this.fecharModal();
+                        this.$eventBus.$emit("ModalAddStudent:reload", this.config);
                         this.loading = false;
                     },
                     onError: () => {
@@ -149,7 +149,15 @@ export default {
                     }
                 });
         }
-    }
+    },
+    beforeUnmount() {
+        this.$eventBus.$off("ModalAddStudent:config");
+    },
+    created() {
+        this.$eventBus.$on("ModalAddStudent:config", (evento) => {
+            this.config = evento;
+        });
+    },
 }
 </script>
 

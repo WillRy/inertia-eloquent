@@ -39,7 +39,7 @@ export default {
     gap: 10px;
 }
 
-/deep/ .page-header-actions > * {
+/deep/ .page-header-actions > :not(button) {
     min-width: 260px;
 }
 </style>

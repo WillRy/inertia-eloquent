@@ -10,12 +10,12 @@
         <div class="header-nav" :class="{open: dropdown}">
             <ul>
                 <li>
-                    <Link href="/dashboard/students" :class="{active: $page.url.endsWith('/dashboard/students')}">
+                    <Link href="/dashboard/students" :class="{active: $page.url.includes('/dashboard/students')}">
                         alunos (Padrão InertiaJS)
                     </Link>
                 </li>
                 <li>
-                    <Link href="/dashboard/plans" :class="{active: $page.url.endsWith('/dashboard/plans')}">
+                    <Link href="/dashboard/plans" :class="{active: $page.url.includes('/dashboard/plans')}">
                         planos (Padrão VueJS)
                     </Link>
                 </li>
@@ -27,7 +27,7 @@
                 </li>
                 <li>
                     <Link href="/dashboard/subscriptions/url"
-                          :class="{active: $page.url.endsWith('/dashboard/subscriptions/url')}">
+                          :class="{active: $page.url.includes('/dashboard/subscriptions/url')}">
                         matriculas (Padrão Vue COM router)
                     </Link>
                 </li>

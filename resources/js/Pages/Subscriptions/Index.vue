@@ -5,7 +5,7 @@
                 <h3>Matrículas</h3>
             </template>
             <template #actions>
-                <button class="btn btn-min btn-primary" @click="abrirModalCadastro = true">
+                <button class="btn btn-min btn-primary" @click="abrirModalCadastro">
                     Cadastrar
                 </button>
 
@@ -41,12 +41,9 @@
                 :key="dados.id"
             />
         </div>
-        <Loader v-if="loading" width="120px" height="120px" fill="#6d74ed"/>
+        <Loader v-if="loading" width="120px" height="120px" :cor-principal="true"/>
 
-        <ModalAddSubscription
-            :aberta="abrirModalCadastro"
-            @onClose="abrirModalCadastro = false"
-        />
+        <ModalAddSubscription/>
 
         <ModalRemoveSubscription/>
         <ModalEditSubscription/>
@@ -56,10 +53,10 @@
 <script>
 import Dashboard from "../../Layouts/Dashboard";
 import PageHeader from "../../components/dashboard/PageHeader";
-import BaseInput from "../../components/forms/BaseInput";
+import BaseInput from "../../components/base/form/BaseInput";
 import {mapActions, mapState} from 'vuex'
-import PaginacaoSemRouter from "../../components/paginacao/PaginacaoSemRouter";
-import BaseSelect from "../../components/forms/BaseSelect";
+import PaginacaoSemRouter from "../../components/base/paginacao/PaginacaoSemRouter";
+import BaseSelect from "../../components/base/form/BaseSelect";
 import ModalAddPlan from '../../components/plans/ModalAddPlan';
 import ModalEditPlan from '../../components/plans/ModalEditPlan';
 import ModalRemovePlan from '../../components/plans/ModalRemovePlan';
@@ -91,9 +88,8 @@ export default {
     layout: Dashboard,
     data() {
         return {
-            plans: [],
+            plans: [{id: '', name: 'Todos'}],
             planFilter: null,
-            abrirModalCadastro: false,
             loading: false,
             subscriptions: null,
             search: null,
@@ -102,9 +98,6 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            'matriculas_reload': 'matriculas_reload'
-        }),
         esconderLoading() {
             return this.loading && this.page < 2;
         },
@@ -112,26 +105,10 @@ export default {
             return this.subscriptions && this.subscriptions.last_page || 1;
         }
     },
-    watch: {
-        matriculas_reload(payload) {
-            if (payload && payload.tipo === "exclusao") {
-                let index = this.subscriptions.data.findIndex((item) => item.id === payload.id);
-                this.subscriptions.data.splice(index, 1);
-            } else if (payload && payload.tipo === "edicao") {
-                let index = this.subscriptions.data.findIndex((item) => item.id === payload.id);
-                this.subscriptions.data[index] = payload;
-            } else if (payload && payload.tipo === "criacao") {
-                this.subscriptions.data.unshift(payload);
-            }
-        },
-    },
     methods: {
-        ...mapActions([
-            'returnPlanos'
-        ]),
         pesquisarPlanos(pesquisa) {
             axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response) => {
-                this.plans = response.data.data;
+                this.plans = response.data.data.data;
                 this.plans.unshift({
                     id: '',
                     name: 'Todos'
@@ -149,6 +126,9 @@ export default {
                 this.carregarDados();
             }
         }, 500),
+        abrirModalCadastro(){
+            this.$eventBus.$emit("ModalAddSubscription:config", {});
+        },
         async carregarDados() {
             this.loading = true;
 
@@ -191,6 +171,10 @@ export default {
 
         }
     },
+    beforeUnmount() {
+        window.removeEventListener("scroll", this.aumentarPagina);
+        this.$eventBus.$off("ModalAddSubscription:reload");
+    },
     created() {
         /**
          * carrega os dados via AJAX ao invés do inertiajs
@@ -200,10 +184,23 @@ export default {
         this.carregarDados();
 
         window.addEventListener("scroll", this.aumentarPagina);
+
+        this.$eventBus.$on("ModalAddSubscription:reload", (e) => {
+            if(e.dados) this.subscriptions.data.unshift(e.dados);
+        });
+        this.$eventBus.$on("ModalEditSubscription:reload", (e) => {
+            if(e.dados) {
+                let index = this.subscriptions.data.findIndex((item) => item.id === e.dados.id);
+                this.subscriptions.data[index] = e.dados;
+            }
+        });
+        this.$eventBus.$on("ModalRemoveSubscription:reload", (e) => {
+            if(e.dados) {
+                let index = this.subscriptions.data.findIndex((item) => item.id === e.dados.id);
+                this.subscriptions.data.splice(index, 1);
+            }
+        });
     },
-    beforeUnmount() {
-        window.removeEventListener("scroll", this.aumentarPagina);
-    }
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <BaseModal
-        :aberta="aberta"
+        :aberta="config"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
@@ -12,51 +12,37 @@
                 <BaseSelect
                     label="Aluno"
                     placeholder="Pesquise o aluno"
-                    v-model="form.aluno"
-                    :class="{error: v$.form.aluno.$error}"
+                    v-model="form.student_id"
                     track-by="id"
                     text-by="name"
                     :options="alunos"
                     :internal-search="false"
                     :limit="3"
                     @search-change="pesquisarAlunos"
-                >
-                    <template v-slot:error>
-                        <div v-if="v$.form.aluno.$error">
-                            <p v-if="v$.form.aluno.required.$invalid" class="errorMessage">Informe o aluno</p>
-                        </div>
-                    </template>
-                </BaseSelect>
+                    :class="{error: form.errors.student_id}"
+                    :error="form.errors.student_id"
+                ></BaseSelect>
 
                 <BaseSelect
                     label="Plano"
                     placeholder="Pesquise o plano"
-                    v-model="form.plano"
-                    :class="{error: v$.form.plano.$error}"
+                    v-model="form.plan_id"
                     track-by="id"
                     text-by="name"
                     :options="planos"
                     :internal-search="false"
                     :limit="3"
                     @search-change="pesquisarPlanos"
-                >
-                    <template v-slot:error>
-                        <div v-if="v$.form.plano.$error">
-                            <p v-if="v$.form.plano.required.$invalid" class="errorMessage">Informe o plano</p>
-                        </div>
-                    </template>
-                </BaseSelect>
+                    :class="{error: form.errors.plan_id}"
+                    :error="form.errors.plan_id"
+                ></BaseSelect>
 
                 <BaseDate
                     label="Data de Início"
                     v-model:formatado="form.dt_start"
-                >
-                    <template v-slot:error>
-                        <div v-if="v$.form.dt_start.$error">
-                            <p v-if="v$.form.dt_start.required.$invalid" class="errorMessage">Informe o início</p>
-                        </div>
-                    </template>
-                </BaseDate>
+                    :class="{error: form.errors.dt_start}"
+                    :error="form.errors.dt_start"
+                ></BaseDate>
 
 
             </form>
@@ -74,100 +60,92 @@
 </template>
 
 <script>
-import BaseModal from "../modal/BaseModal";
-import BaseInput from "../forms/BaseInput";
-import BaseDate from "../forms/BaseDate";
+import BaseModal from "../base/modal/BaseModal";
+import BaseInput from "../base/form/BaseInput";
+import BaseDate from "../base/form/BaseDate";
 import useVuelidate from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
 import axios from 'axios';
 import {mapMutations} from 'vuex';
-import BaseSelect from "../forms/BaseSelect";
+import BaseSelect from "../base/form/BaseSelect";
+import {useForm} from "@inertiajs/inertia-vue3";
 
 export default {
     name: "ModalAddSubscription",
     components: {BaseSelect, BaseInput, BaseDate, BaseModal},
-    props: {
-        aberta: Boolean
+    setup() {
+        const form = useForm({
+            student_id: null,
+            plan_id: null,
+            dt_start: ''
+        });
+        return {form};
     },
-    setup: () => ({v$: useVuelidate()}),
     data() {
         return {
             alunos: [],
             planos: [],
-            form: {
-                aluno: null,
-                plano: null,
-                dt_start: null
-            },
+            config: null,
             loading: false,
         }
     },
-    validations() {
-        return {
-            form: {
-                aluno: {required},
-                plano: {required},
-                dt_start: {required},
-            }
-        }
-    },
     methods: {
-        ...mapMutations([
-            'SET_MATRICULAS_RELOAD'
-        ]),
         carregarFormulario() {
-            this.form = {
-                aluno: null,
-                plano: null,
+            Object.assign(this.form, {
+                student_id: null,
+                plan_id: null,
                 dt_start: new Date()
-            };
+            });
         },
         fecharModal() {
-            this.v$.$reset();
+            this.config = null;
+            this.form.reset();
+            this.form.clearErrors();
             this.$emit("onClose");
         },
         pesquisarAlunos(pesquisa) {
             axios.get("/dashboard/students/list", {params: {search: pesquisa}}).then((response) => {
-                this.alunos = response.data.data;
+                this.alunos = response.data.data.data;
             });
         },
         pesquisarPlanos(pesquisa) {
             axios.get("/dashboard/plans/list", {params: {search: pesquisa}}).then((response) => {
-                this.planos = response.data.data;
+                this.planos = response.data.data.data;
             });
         },
         async submit() {
-            const result = await this.v$.$validate();
-            if (result) {
-                this.loading = true;
-
-                let dados = {
-                    ...this.form,
-                    student_id: this.form.aluno ? this.form.aluno.id : '',
-                    plan_id: this.form.plano ? this.form.plano.id : '',
-                }
-
-                axios.post("/dashboard/subscriptions", dados).then((response) => {
-                    this.fecharModal();
-                    this.$toast.open({
-                        type: 'success',
-                        message: 'Matrícula cadastrada com sucesso'
-                    });
-                    //envia sinal de reload para outros componentes
-                    //nao uso this.$emit pois as vezes a modal nao está no mesmo nivel
-                    //no DOM, que os outros componentes
-                    this.SET_MATRICULAS_RELOAD({
-                        ...response.data.data,
-                        tipo: 'criacao'
-                    });
-                }).catch((error) => {
-                    this.$laravelError(error, 'Não foi possível cadastrar a matrícula')
-                }).finally(() => {
-                    this.loading = false;
+            this.loading = true;
+            this.form
+                .transform((data) => {
+                    return {
+                        ...data,
+                        student_id: this.form.student_id ? this.form.student_id.id : null,
+                        plan_id: this.form.plan_id ? this.form.plan_id.id : null,
+                    }
+                })
+                .post("/dashboard/subscriptions", {
+                    onSuccess: () => {
+                        this.fecharModal();
+                        this.$eventBus.$emit("ModalAddSubscription:reload", {
+                            ...this.config,
+                            dados: this.$page.props.dados
+                        });
+                        this.loading = false;
+                    },
+                    onError: () => {
+                        this.loading = false;
+                    }
                 });
-            }
         }
-    }
+    },
+    beforeUnmount() {
+        this.$eventBus.$off("ModalAddSubscription:config");
+    },
+    created() {
+        this.$eventBus.$on("ModalAddSubscription:config", (evento) => {
+            this.config = evento;
+        });
+    },
 }
 </script>
 

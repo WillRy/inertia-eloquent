@@ -1,6 +1,6 @@
 <template>
     <BaseModal
-        :aberta="aluno_id"
+        :aberta="config"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
@@ -69,7 +69,7 @@
                 </BaseSelect>
 
             </form>
-            <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
+            <Loader height="80px" width="80px" v-if="loadingDados" :cor-principal="true"/>
         </template>
         <template #footer>
             <button class="btn btn-full btn-primary" @click.prevent="submit">
@@ -84,12 +84,12 @@
 </template>
 
 <script>
-import BaseModal from "../modal/BaseModal";
-import BaseInput from "../forms/BaseInput";
-import BaseDate from "../forms/BaseDate";
+import BaseModal from "../base/modal/BaseModal";
+import BaseInput from "../base/form/BaseInput";
+import BaseDate from "../base/form/BaseDate";
 import axios from 'axios';
 import {mapMutations, mapState} from 'vuex';
-import BaseSelect from "../forms/BaseSelect";
+import BaseSelect from "../base/form/BaseSelect";
 import {useForm} from "@inertiajs/inertia-vue3";
 
 export default {
@@ -109,6 +109,7 @@ export default {
     },
     data() {
         return {
+            config: null,
             loading: false,
             loadingDados: false,
             sexo: [
@@ -118,19 +119,12 @@ export default {
             ],
         }
     },
-    computed: {
-        ...mapState({
-            'aluno_id': 'alunos_id_edicao'
-        })
-    },
+    computed: {},
     methods: {
-        ...mapMutations([
-            'SET_ALUNOS_RELOAD',
-            'SET_ALUNOS_ID_EDICAO'
-        ]),
+
         carregarFormulario() {
             this.loadingDados = true;
-            axios.get(`/dashboard/students/${this.aluno_id}`).then((response) => {
+            axios.get(`/dashboard/students/${this.config.aluno_id}`).then((response) => {
                 Object.assign(this.form, response.data.data);
                 /** pré carrega select de genero **/
                 this.form.gender = this.sexo.find((s) => s.id === response.data.data.gender);
@@ -145,33 +139,42 @@ export default {
             })
         },
         fecharModal() {
+            this.config = null;
             this.form.reset();
             this.form.clearErrors();
             this.$emit("onClose");
-            this.SET_ALUNOS_ID_EDICAO(null);
         },
         async submit() {
             this.loading = true;
             this.form
                 .transform(data => {
-                    console.log(data);
                     return {
                         ...data,
                         gender: data.gender ? data.gender.id : ''
                     }
                 })
-                .put(`/dashboard/students/${this.aluno_id}`, {
+                .put(`/dashboard/students/${this.config.aluno_id}`, {
                     only: this.reload,
                     onSuccess: () => {
                         this.fecharModal();
                         this.loading = false;
+                        this.$eventBus.$emit("ModalEditStudent:reload", this.config);
+
                     },
                     onError: () => {
                         this.loading = false;
                     }
                 });
         }
-    }
+    },
+    beforeUnmount() {
+        this.$eventBus.$off("ModalEditStudent:config");
+    },
+    created() {
+        this.$eventBus.$on("ModalEditStudent:config", (evento) => {
+            this.config = evento;
+        });
+    },
 }
 </script>
 

@@ -35,7 +35,7 @@ class StudentController extends Controller
     {
         $filters = ["search" => $request->input("search")];
         $students = (new Student())->searchStudents($filters);
-        return response()->json($students);
+        return $this->responseJSON($students);
     }
 
     public function store(StudentStoreUpdateRequest $request)

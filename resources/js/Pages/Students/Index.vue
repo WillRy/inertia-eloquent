@@ -5,7 +5,7 @@
                 <h3>Alunos</h3>
             </template>
             <template #actions>
-                <button class="btn btn-min btn-primary" @click="abrirModalCadastro = true">
+                <button class="btn btn-min btn-primary" @click="abrirCadastro">
                     Cadastrar
                 </button>
 
@@ -47,79 +47,107 @@
                 Outros: {{ total.o }}
             </div>
         </div>
-        <div class="box">
-            <table :class="{loading: loading}">
-                <thead>
-                <tr>
-                    <HeadSort
-                        @onSort="sortBy('name')"
-                        nome="name"
-                        texto="Nome"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <HeadSort
-                        @onSort="sortBy('email')"
-                        nome="email"
-                        texto="Email"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <HeadSort
-                        @onSort="sortBy('gender')"
-                        nome="gender"
-                        texto="Gênero"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <HeadSort
-                        @onSort="sortBy('date_birth')"
-                        nome="date_birth"
-                        texto="Nascimento"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <HeadSort
-                        @onSort="sortBy('weight')"
-                        nome="weight"
-                        texto="Peso"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <HeadSort
-                        @onSort="sortBy('height')"
-                        nome="height"
-                        texto="Altura"
-                        :order="sortOrder"
-                        :ordenando="sortName"
-                    />
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody v-if="students && students.data.length">
-                <tr v-for="(student,index) in students.data" :key="index">
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ $filters.genero(student.gender) }}</td>
-                    <td>{{ $filters.data(student.date_birth) }}</td>
-                    <td>{{ student.weight }}</td>
-                    <td>{{ student.height }}</td>
-                    <td>
-                        <button class="link-action link-action-primary" @click="abrirEdicao(student.id)">
-                            editar
-                        </button>
-                        <button class="link-action link-action-danger" @click="abrirExclusao(student.id)">
-                            excluir
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-                <tbody v-if="!loading && students && students.data.length === 0">
-                <tr>
-                    <td colspan="7" style="text-align: center">Não há registros para esta pesquisa</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="content-table">
+            <div class="tabela-container">
+                <table :class="{loading: loading}" class="tabela">
+                    <thead>
+                    <tr>
+                        <HeadSort
+                            @onSort="sortBy('name')"
+                            nome="name"
+                            texto="Nome"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <HeadSort
+                            @onSort="sortBy('email')"
+                            nome="email"
+                            texto="Email"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <HeadSort
+                            @onSort="sortBy('gender')"
+                            nome="gender"
+                            texto="Gênero"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <HeadSort
+                            @onSort="sortBy('date_birth')"
+                            nome="date_birth"
+                            texto="Nascimento"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <HeadSort
+                            @onSort="sortBy('weight')"
+                            nome="weight"
+                            texto="Peso"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <HeadSort
+                            @onSort="sortBy('height')"
+                            nome="height"
+                            texto="Altura"
+                            :order="sortOrder"
+                            :ordenando="sortName"
+                        />
+                        <th>
+
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody v-if="students && students.data.length">
+                    <tr v-for="(student,index) in students.data" :key="index">
+                        <td>
+                            <span class="item text-ellipsis">{{ student.name }}</span>
+                        </td>
+                        <td>
+                            <span class="item text-ellipsis">
+                                {{ student.email }}
+                             </span>
+                        </td>
+                        <td>
+                            <span class="item text-ellipsis">
+                                {{ $filters.genero(student.gender) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="item text-ellipsis">
+                                {{ $filters.data(student.date_birth) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="item text-ellipsis">
+                                {{ student.weight }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="item text-ellipsis">
+                                {{ student.height }}
+                            </span>
+                        </td>
+                        <td class="coluna-acoes">
+                            <DropdownAcoes>
+                                <button @click="abrirEdicao(student.id)">
+                                    editar
+                                </button>
+                                <button @click="abrirExclusao(student.id)">
+                                    excluir
+                                </button>
+                            </DropdownAcoes>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody v-if="!loading && students && students.data.length === 0">
+                    <tr>
+                        <td colspan="7" style="text-align: center">Não há registros para esta pesquisa</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <PaginacaoSemRouter
                 v-if="students"
                 :pagina-atual="students.current_page"
@@ -129,30 +157,30 @@
             />
         </div>
         <ModalAddStudent
-            :aberta="abrirModalCadastro"
-            @onClose="abrirModalCadastro = false"
-            :reload="['total','students','flash']"
+            :reload="['total','students','flash','errors']"
         />
-        <ModalEditStudent :reload="['total','students','flash']"/>
-        <ModalRemoveStudent :reload="['total','students','flash']"/>
+        <ModalEditStudent :reload="['total','students','flash','errors']"/>
+        <ModalRemoveStudent :reload="['total','students','flash','errors']"/>
     </div>
 </template>
 
 <script>
 import Dashboard from "../../Layouts/Dashboard";
 import PageHeader from "../../components/dashboard/PageHeader";
-import BaseInput from "../../components/forms/BaseInput";
+import BaseInput from "../../components/base/form/BaseInput";
 import ModalAddStudent from "../../components/students/ModalAddStudent";
 import ModalEditStudent from "../../components/students/ModalEditStudent";
 import {mapMutations, mapState} from 'vuex'
-import PaginacaoSemRouter from "../../components/paginacao/PaginacaoSemRouter";
-import BaseSelect from "../../components/forms/BaseSelect";
+import PaginacaoSemRouter from "../../components/base/paginacao/PaginacaoSemRouter";
+import BaseSelect from "../../components/base/form/BaseSelect";
 import ModalRemoveStudent from "../../components/students/ModalRemoveStudent";
-import HeadSort from "../../components/datatables/HeadSort";
+import HeadSort from "../../components/base/datatables/HeadSort";
+import DropdownAcoes from "../../components/base/tabela/DropdownAcoes";
 
 export default {
     name: "Index",
     components: {
+        DropdownAcoes,
         HeadSort,
         ModalRemoveStudent,
         BaseSelect,
@@ -166,7 +194,6 @@ export default {
     props: ["students", "total", "filters", "page"],
     data() {
         return {
-            abrirModalCadastro: false,
             searchField: this.filters.search,
             genderField: null,
             loading: false,
@@ -180,24 +207,15 @@ export default {
             sortOrder: this.filters.sortOrder,
         }
     },
-    computed: {
-        ...mapState({
-            'alunos_reload': 'alunos_reload'
-        }),
-    },
     watch: {
-        alunos_reload() {
-            this.reload();
-        },
-        "filters.gender": function () {
-            this.normalizarFiltroGenero();
+        "filters": {
+            deep: true,
+            handler() {
+                this.normalizarFiltroGenero();
+            }
         }
     },
     methods: {
-        ...mapMutations([
-            'SET_ALUNOS_ID_EDICAO',
-            'SET_ALUNOS_ID_EXCLUSAO',
-        ]),
         sortBy(campo) {
             this.sortName = campo;
             if (this.sortName !== campo) {
@@ -207,15 +225,24 @@ export default {
             }
             this.reload(1);
         },
+        abrirCadastro() {
+            this.$eventBus.$emit("ModalAddStudent:config", {});
+        },
         abrirEdicao(id) {
-            this.SET_ALUNOS_ID_EDICAO(id);
+            this.$eventBus.$emit("ModalEditStudent:config", {
+                aluno_id: id
+            });
         },
         abrirExclusao(id) {
-            this.SET_ALUNOS_ID_EXCLUSAO(id);
+            this.$eventBus.$emit("ModalRemoveStudent:config", {
+                aluno_id: id
+            });
         },
         normalizarFiltroGenero() {
             /** Normaliza o filtro ao carregar pagina, pois o filtro deve ser um objeto no campo de select **/
             this.genderField = this.filtroSexo.find((item) => item.id == this.filters.gender);
+            this.sortName = this.filters.sortName;
+            this.sortOrder = this.filters.sortOrder;
         },
         reload(page) {
             this.loading = true;
@@ -224,11 +251,10 @@ export default {
                 page: page || this.page,
                 ...(this.searchField ? {search: this.searchField} : {}),
                 ...(this.genderField && this.genderField.id ? {gender: this.genderField.id} : {}),
-                ...(this.sortName ? {sortName: this.sortName || 'id'} : {}),
-                ...(this.sortOrder ? {sortOrder: this.sortOrder || 'asc'} : {}),
+                ...(this.sortName ? {sortName: this.sortName} : {}),
+                ...(this.sortOrder ? {sortOrder: this.sortOrder} : {}),
             }, {
-                only: ['total','students','flash'],
-                preserveState: true,
+                only: ['total', 'students', 'flash', 'filters'],
                 onSuccess: () => {
                     this.loading = false
                 },
@@ -236,19 +262,12 @@ export default {
         }
     },
     created() {
-        console.log("created executou");
         this.normalizarFiltroGenero();
     }
 }
 </script>
 
 <style scoped>
-.box {
-    padding: 30px;
-    background: #FFFFFF;
-    border-radius: 4px;
-    overflow-x: auto;
-}
 
 .total-container {
     display: grid;

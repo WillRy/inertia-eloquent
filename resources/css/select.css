@@ -1,3 +1,6 @@
+/**
+* Personaliza o CSS da lib VueMultiselect
+**/
 fieldset[disabled] .multiselect {
     pointer-events: none
 }
@@ -21,7 +24,7 @@ fieldset[disabled] .multiselect {
     width: 16px;
     height: 16px;
     border-radius: 100%;
-    border-color: #020540 transparent transparent;
+    border-color: var(--cor-principal) transparent transparent;
     border-style: solid;
     border-width: 2px;
     box-shadow: 0 0 0 1px transparent
@@ -63,8 +66,7 @@ fieldset[disabled] .multiselect {
     width: 100%;
     min-height: 40px;
     text-align: left;
-    color: #35495e;
-    height: 100%;
+    color: #35495e
 }
 
 .multiselect * {
@@ -150,14 +152,13 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__tags {
-    max-height: 42px;
+    min-height: 42px;
     display: block;
-    padding: 11px 31px 0px 8px;
-    border-radius: 5px;
-    border: 1px solid #DDDDDD;
+    padding: 10px 40px 0 8px;
+    border-radius: 8px;
+    border: 1px solid #BBBFC466;
     background: #fff;
     font-size: 14px;
-    height: 100%;
 }
 
 .multiselect__tag {
@@ -168,7 +169,7 @@ fieldset[disabled] .multiselect {
     margin-right: 10px;
     color: #fff;
     line-height: 1;
-    background: #020540;
+    background: var(--cor-principal);
     margin-bottom: 5px;
     white-space: nowrap;
     overflow: hidden;
@@ -224,7 +225,7 @@ fieldset[disabled] .multiselect {
 .multiselect__select {
     position: absolute;
     width: 40px;
-    height: 100%;
+    height: 38px;
     right: 1px;
     top: 1px;
     padding: 4px 8px;
@@ -245,10 +246,12 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__placeholder {
-    color: #adadad;
     display: inline-block;
-    margin-bottom: 14px;
-    padding-top: 2px
+    margin-bottom: 10px;
+    padding-top: 2px;
+
+    font-size: 16px;
+    color: var(--cor-placeholder);
 }
 
 .multiselect--active .multiselect__placeholder {
@@ -321,14 +324,14 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--highlight {
-    background: #020540;
+    background: var(--cor-principal);
     outline: none;
     color: #fff
 }
 
 .multiselect__option--highlight:after {
     content: attr(data-select);
-    background: #020540;
+    background: var(--cor-principal);
     color: #fff
 }
 
@@ -344,12 +347,12 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--selected.multiselect__option--highlight {
-    background: #121765;
+    background: var(--cor-principal);
     color: #fff
 }
 
 .multiselect__option--selected.multiselect__option--highlight:after {
-    background: #121765;
+    background: var(--cor-principal);
     content: attr(data-deselect);
     color: #fff
 }
@@ -385,12 +388,12 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--group-selected.multiselect__option--highlight {
-    background: #121765;
+    background: var(--cor-principal);
     color: #fff
 }
 
 .multiselect__option--group-selected.multiselect__option--highlight:after {
-    background: #121765;
+    background: var(--cor-principal);
     content: attr(data-deselect);
     color: #fff
 }
@@ -460,6 +463,11 @@ fieldset[disabled] .multiselect {
     }
 }
 
-.error .multiselect__tags{
-    border: 1px solid red !important;
+
+.vc-select select {
+    width: 56px !important;
+}
+
+.multiselect__option {
+
 }

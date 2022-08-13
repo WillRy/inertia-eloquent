@@ -10,7 +10,6 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.25",
         "browser-sync": "^2.27.9",
         "browser-sync-webpack-plugin": "^2.3.0",
         "laravel-mix": "^6.0.6",
@@ -22,16 +21,20 @@
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
         "@inertiajs/inertia": "^0.11.0",
         "@inertiajs/inertia-vue3": "^0.6.0",
-        "@vuelidate/core": "^2.0.0-alpha.40",
-        "@vuelidate/validators": "^2.0.0-alpha.28",
-        "moment": "^2.29.2",
+        "@inertiajs/progress": "^0.2.7",
+        "@vuelidate/core": "^2.0.0-alpha.41",
+        "@vuelidate/validators": "^2.0.0-alpha.29",
+        "axios": "^0.25",
+        "floating-vue": "^2.0.0-beta.16",
+        "mitt": "^3.0.0",
+        "moment": "^2.29.3",
         "moment-timezone": "^0.5.34",
         "text-mask-addons": "^3.8.0",
         "v-calendar": "^3.0.0-alpha.8",
         "v-mask": "^2.3.0",
-        "vue": "^3.2.31",
+        "vue": "^3.2.33",
         "vue-multiselect": "^3.0.0-alpha.2",
-        "vue-toast-notification": "^3.0.0",
+        "vue-toast-notification": "^3.0.1",
         "vuex": "^4.0.2"
     }
 }

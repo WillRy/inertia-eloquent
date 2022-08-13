@@ -7,24 +7,26 @@
 
         <form @submit.prevent="submit">
             <BaseInput
-                label="seu e-mail"
-                type="email"
-                placeholder="exemplo@exemplo.com"
-                v-model="login.email"
-                :class="{error: errors.email}"
-                :error="errors.email"
+                type="text"
+                name="login"
+                label="Login"
+                v-model="form.email"
+                :error="form.errors.email"
+                :class="{error: form.errors.email}"
             />
             <BaseInput
                 label="sua senha"
                 type="password"
-                placeholder="******"
-                v-model="login.password"
-                :class="{error: errors.password}"
-                :error="errors.password"
+                name="senha"
+                v-model="form.password"
+                :error="form.errors.password"
+                :class="{error: form.errors.password}"
+                autocomplete="autocomplete"
             />
-            <button class="btn btn-full btn-primary" type="submit" :disabled="loading">
-                <Loader v-if="loading" width="20px" height="20px"/>
-                Entrar no sistema
+
+            <button class="btn btn-primary btn-full" :disabled="loading">
+                <Loader v-if="loading" height="20px" width="20px"/>
+                Entrar
             </button>
             <Link href="/register" class="link-btn link-btn-primary link-btn-center">
                 Cadastrar-se
@@ -35,41 +37,45 @@
 
 <script>
 import Publico from '../../Layouts/Publico'
-import BaseInput from "../../components/forms/BaseInput";
-import {Link} from "@inertiajs/inertia-vue3";
+import BaseInput from "../../components/base/form/BaseInput";
+import {Link, useForm} from "@inertiajs/inertia-vue3";
 
 export default {
     name: "login",
     components: {BaseInput, Link},
     layout: Publico,
+    setup() {
+        const form = useForm({
+            email: '',
+            password: ''
+        });
+        return {form};
+    },
     props: {
         errors: Object,
         exception: String
     },
     data() {
         return {
-            login: {
-                email: '',
-                password: ''
-            },
             loading: false
         }
     },
     methods: {
         submit() {
-            this.$inertia.post("/login", this.login, {
+            this.form.post("/login", {
                 onStart: () => {
-                    this.loading = true
+                    this.loading = true;
                 },
-                onFinish: () => {
+                onSuccess: () => {
                     this.loading = false
                 },
                 onError: () => {
-                    this.loading = false
-                },
-                preserveState: true
+                    this.loading = false;
+                }
             });
         }
+    },
+    created() {
     }
 }
 </script>

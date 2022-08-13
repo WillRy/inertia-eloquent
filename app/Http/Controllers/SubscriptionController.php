@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUpdateSubscriptionRequest;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -35,13 +36,9 @@ class SubscriptionController extends Controller
                 $request->input("plan")
             );
 
-            return response()->json([
-                "data" => $subs
-            ]);
+            return $this->responseJSON($subs);
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+            return $this->errorJSON($e->getMessage());
         }
     }
 
@@ -50,13 +47,9 @@ class SubscriptionController extends Controller
         try {
             $subs = (new Subscription())->getSubscription($id);
 
-            return response()->json([
-                "data" => $subs
-            ]);
+            return $this->responseJSON($subs);
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+            return $this->errorJSON($e->getMessage());
         }
     }
 
@@ -82,14 +75,12 @@ class SubscriptionController extends Controller
 
             $sub = Subscription::create($data);
 
-            return response()->json([
-                "data" => (new Subscription())->getSubscription($sub->id),
-                "success" => "Matrícula criada com sucesso!"
-            ]);
+            $returnData = (new Subscription())->getSubscription($sub->id);
+
+            return $this->successInertia('Matrícula criada com sucesso!',null, [], $returnData);
+
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+            return $this->errorInertia($e->getMessage());
         }
     }
 
@@ -104,14 +95,12 @@ class SubscriptionController extends Controller
             $subscription->fill($data);
             $subscription->save();
 
-            return response()->json([
-                "data" => (new Subscription())->getSubscription($subscription->id),
-                "success" => "Matrícula editada com sucesso!"
-            ]);
+
+            $returnData = (new Subscription())->getSubscription($subscription->id);
+
+            return $this->successInertia("Matrícula editada com sucesso!",null, [], $returnData);
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+            return $this->errorInertia($e->getMessage());
         }
     }
 
@@ -126,11 +115,9 @@ class SubscriptionController extends Controller
 
             $sub->delete();
 
-            return response()->json([], 204);
+            return $this->successInertia("Matrícula excluída com sucesso!");
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => $e->getMessage()
-            ], 500);
+            return $this->errorInertia($e->getMessage());
         }
     }
 }

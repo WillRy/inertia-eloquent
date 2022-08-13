@@ -1,0 +1,139 @@
+.tabela-container {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+}
+
+.tabela {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-color: inherit;
+    text-indent: 0;
+
+}
+
+.tabela {
+    min-height: 36px;
+}
+
+.tabela thead tr {
+    background-color: rgb(249 250 251);
+}
+
+.tabela thead tr th {
+    padding: 0;
+    text-align: left;
+}
+
+.tabela thead tr th .header {
+
+    color: rgb(75 85 99);
+    font-weight: 500;
+    font-size: .875rem;
+    line-height: 1.25rem;
+
+    padding: 0.5rem 1rem;
+
+    white-space: nowrap;
+}
+
+.tabela thead tr th > button {
+    color: rgb(75 85 99);
+    font-weight: 500;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.tabela thead tr th > *:not(button) {
+    color: rgb(75 85 99);
+    font-weight: 500;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+}
+
+.tabela tbody {
+    border-top: 1px solid #e5e7eb;
+}
+
+.tabela tbody tr .item {
+    padding: 0.65rem 1rem;
+    display: block;
+}
+
+.tabela tbody tr ~ tr {
+    border-top: 1px solid #e5e7eb;
+    /* border-top: 1px solid red; */
+}
+
+.tabela a {
+    color: #35528C;
+    text-decoration: none;
+}
+
+.tabela a:hover {
+    opacity: 0.6;
+}
+
+
+.tabela-vazia {
+    text-align: center;
+}
+
+.tabela-vazia tr td {
+    padding: 8px;
+}
+
+.coluna-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 270px;
+}
+
+.coluna-acoes {
+    max-width: 50px;
+    width: 50px;
+}
+.td-checkbox {
+    min-width: 30px;
+    width: 30px;
+}
+.td-checkbox  input{
+    margin: 0 auto;
+    display: block;
+}
+
+.tr-click {
+    cursor: pointer;
+}
+
+.tr-click.active,.tr-click:hover {
+    background: #f2f2f2;
+}
+
+
+.tabela-altura-limitada {
+    max-height: 600px;
+    overflow: auto;
+}

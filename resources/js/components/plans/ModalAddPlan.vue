@@ -1,6 +1,6 @@
 <template>
     <BaseModal
-        :aberta="aberta"
+        :aberta="config"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
@@ -14,36 +14,27 @@
                     type="text"
                     placeholder=""
                     v-model="form.name"
-                    :class="{error: v$.form.name.$error}"
-                >
-                    <template #error v-if="v$.form.name.$error">
-                        <div v-if="v$.form.name.required.$invalid" class="errorMessage">Informe o nome</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.name}"
+                    :error="form.errors.name"
+                ></BaseInput>
 
                 <BaseInput
                     label="Preço"
                     type="text"
                     v-mask="currencyMask"
                     v-model="form.price"
-                    :class="{error: v$.form.price.$error}"
-                >
-                    <template #error v-if="v$.form.price.$error">
-                        <div v-if="v$.form.price.required.$invalid" class="errorMessage">Informe o preço</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.price}"
+                    :error="form.errors.price"
+                ></BaseInput>
 
                 <BaseInput
                     label="Duração (Meses)"
                     type="number"
                     min="1"
                     v-model="form.duration"
-                    :class="{error: v$.form.duration.$error}"
-                >
-                    <template #error v-if="v$.form.duration.$error">
-                        <div v-if="v$.form.duration.required.$invalid" class="errorMessage">Informe a duração</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.duration}"
+                    :error="form.errors.duration"
+                ></BaseInput>
 
             </form>
         </template>
@@ -60,15 +51,16 @@
 </template>
 
 <script>
-import BaseModal from "../modal/BaseModal";
-import BaseInput from "../forms/BaseInput";
+import BaseModal from "../base/modal/BaseModal";
+import BaseInput from "../base/form/BaseInput";
 import useVuelidate from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
 import axios from 'axios';
 import {mapMutations} from 'vuex';
-import BaseSelect from "../forms/BaseSelect";
+import BaseSelect from "../base/form/BaseSelect";
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import {useForm} from "@inertiajs/inertia-vue3";
 
 const currencyMask = createNumberMask({
     prefix: '',
@@ -78,65 +70,55 @@ const currencyMask = createNumberMask({
 })
 
 export default {
-    name: "Plan",
+    name: "ModalAddPlan",
     components: {BaseSelect, BaseInput, BaseModal},
-    props: {
-        aberta: Boolean
+    setup() {
+        const form = useForm({
+            name: '',
+            price: '',
+            duration: ''
+        });
+        return {form};
     },
-    setup: () => ({v$: useVuelidate()}),
     data() {
         return {
+            config: null,
             currencyMask: currencyMask,
-            form: {
-                name: '',
-                price: '',
-                duration: '',
-            },
             loading: false,
         }
     },
-    validations() {
-        return {
-            form: {
-                name: {required},
-                price: {required},
-                duration: {required},
-            }
-        }
-    },
     methods: {
-        ...mapMutations([
-            'SET_PLANOS_RELOAD'
-        ]),
         carregarFormulario() {
         },
         fecharModal() {
-            this.v$.$reset();
+            this.config = null;
+            this.form.reset();
+            this.form.clearErrors();
             this.$emit("onClose");
         },
         async submit() {
-            const result = await this.v$.$validate();
-            if (result) {
-                this.loading = true;
-
-                axios.post("/dashboard/plans", this.form).then((response) => {
-                    this.fecharModal();
-                    this.$toast.open({
-                        type: 'success',
-                        message: 'Plano cadastrado com sucesso'
-                    });
-                    //envia sinal de reload para outros componentes
-                    //nao uso this.$emit pois as vezes a modal nao está no mesmo nivel
-                    //no DOM, que os outros componentes
-                    this.SET_PLANOS_RELOAD(response.data);
-                }).catch((error) => {
-                    this.$laravelError(error, 'Não foi possível cadastrar o plano')
-                }).finally(() => {
-                    this.loading = false;
-                })
-            }
+            this.loading = true;
+            this.form
+                .post("/dashboard/plans", {
+                    onSuccess: () => {
+                        this.fecharModal();
+                        this.$eventBus.$emit("ModalAddPlan:reload", this.config);
+                        this.loading = false;
+                    },
+                    onError: () => {
+                        this.loading = false;
+                    }
+                });
         }
-    }
+    },
+    beforeUnmount() {
+        this.$eventBus.$off("ModalAddPlan:config");
+    },
+    created() {
+        this.$eventBus.$on("ModalAddPlan:config", (evento) => {
+            this.config = evento;
+        });
+    },
 }
 </script>
 

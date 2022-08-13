@@ -1,6 +1,6 @@
 <template>
     <BaseModal
-        :aberta="plano_id"
+        :aberta="config"
         @onOpen="carregarFormulario"
         @onClose="fecharModal"
     >
@@ -14,39 +14,30 @@
                     type="text"
                     placeholder=""
                     v-model="form.name"
-                    :class="{error: v$.form.name.$error}"
-                >
-                    <template #error v-if="v$.form.name.$error">
-                        <div v-if="v$.form.name.required.$invalid" class="errorMessage">Informe o nome</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.name}"
+                    :error="form.errors.name"
+                ></BaseInput>
 
                 <BaseInput
                     label="Preço"
                     type="text"
                     v-mask="'###.##'"
                     v-model="form.price"
-                    :class="{error: v$.form.price.$error}"
-                >
-                    <template #error v-if="v$.form.price.$error">
-                        <div v-if="v$.form.price.required.$invalid" class="errorMessage">Informe o preço</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.price}"
+                    :error="form.errors.price"
+                ></BaseInput>
 
                 <BaseInput
                     label="Duração (Meses)"
                     type="number"
                     min="1"
                     v-model="form.duration"
-                    :class="{error: v$.form.duration.$error}"
-                >
-                    <template #error v-if="v$.form.duration.$error">
-                        <div v-if="v$.form.duration.required.$invalid" class="errorMessage">Informe a duração</div>
-                    </template>
-                </BaseInput>
+                    :class="{error: form.errors.duration}"
+                    :error="form.errors.duration"
+                ></BaseInput>
 
             </form>
-            <Loader height="80px" width="80px" v-if="loadingDados" fill="#6d74ed"/>
+            <Loader height="80px" width="80px" v-if="loadingDados" :cor-principal="true"/>
         </template>
         <template #footer>
             <button class="btn btn-full btn-primary" @click.prevent="submit">
@@ -61,54 +52,39 @@
 </template>
 
 <script>
-import BaseModal from "../modal/BaseModal";
-import BaseInput from "../forms/BaseInput";
+import BaseModal from "../base/modal/BaseModal";
+import BaseInput from "../base/form/BaseInput";
 import useVuelidate from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
 import axios from 'axios';
 import {mapMutations, mapState} from 'vuex';
-import BaseSelect from "../forms/BaseSelect";
+import BaseSelect from "../base/form/BaseSelect";
+import {useForm} from "@inertiajs/inertia-vue3";
 
 export default {
-    name: "Plan",
+    name: "ModalEditPlan",
     components: {BaseSelect, BaseInput, BaseModal},
-    props: {
-        aberta: Boolean
+    setup() {
+        const form = useForm({
+            name: '',
+            price: '',
+            duration: '',
+        });
+        return {form};
     },
-    setup: () => ({v$: useVuelidate()}),
     data() {
         return {
-            form: {
-                name: '',
-                price: '',
-                duration: '',
-            },
+            config: null,
             loading: false,
-            loadingDados: false
+            loadingDados: false,
         }
     },
-    validations() {
-        return {
-            form: {
-                name: {required},
-                price: {required},
-                duration: {required},
-            }
-        }
-    },
-    computed: {
-        ...mapState({
-            'plano_id': 'planos_id_edicao'
-        })
-    },
+
+    computed: {},
     methods: {
-        ...mapMutations([
-            'SET_PLANOS_RELOAD',
-            'SET_PLANOS_ID_EDICAO'
-        ]),
         carregarFormulario() {
             this.loadingDados = true;
-            axios.get(`/dashboard/plans/${this.plano_id}`).then((response) => {
+            axios.get(`/dashboard/plans/${this.config.plano_id}`).then((response) => {
                 // this.plano = response.data.data;
                 Object.assign(this.form, response.data.data)
             }).catch(() => {
@@ -122,33 +98,35 @@ export default {
             })
         },
         fecharModal() {
-            this.v$.$reset();
-            this.SET_PLANOS_ID_EDICAO(null);
+            this.config = null;
+            this.form.reset();
+            this.form.clearErrors();
             this.$emit("onClose");
         },
         async submit() {
-            const result = await this.v$.$validate();
-            if (result) {
-                this.loading = true;
-
-                axios.put(`/dashboard/plans/${this.plano_id}`, this.form).then((response) => {
-                    this.fecharModal();
-                    this.$toast.open({
-                        type: 'success',
-                        message: 'Plano editado com sucesso'
-                    });
-                    //envia sinal de reload para outros componentes
-                    //nao uso this.$emit pois as vezes a modal nao está no mesmo nivel
-                    //no DOM, que os outros componentes
-                    this.SET_PLANOS_RELOAD(response.data);
-                }).catch((error) => {
-                    this.$laravelError(error, 'Não foi possível editar o plano')
-                }).finally(() => {
-                    this.loading = false;
-                })
-            }
+            this.loading = true;
+            this.form
+                .put(`/dashboard/plans/${this.config.plano_id}`, {
+                    only: this.reload,
+                    onSuccess: () => {
+                        this.fecharModal();
+                        this.loading = false;
+                        this.$eventBus.$emit("ModalEditPlan:reload", this.config);
+                    },
+                    onError: () => {
+                        this.loading = false;
+                    }
+                });
         }
-    }
+    },
+    beforeUnmount() {
+        this.$eventBus.$off("ModalEditPlan:config");
+    },
+    created() {
+        this.$eventBus.$on("ModalEditPlan:config", (evento) => {
+            this.config = evento;
+        });
+    },
 }
 </script>
 
